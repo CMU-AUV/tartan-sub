@@ -25,11 +25,11 @@ cd ~/catkin_ws
 catkin_make install
 
 cd ~/tartan-sub/simulation-essentials/robosub-worlds
-cp * ~/catkin_ws/src/uuv_simulator/uuv_descriptions/worlds/
+cp * ~/catkin_ws/src/uuv_simulator/uuv_gazebo_worlds/worlds/
 
 cd ..
 cd robosub-worlds-models
-cp -r * ~/catkin_ws/src/uuv_simulator/uuv_descriptions/world_models
+cp -r * ~/catkin_ws/src/uuv_simulator/uuv_gazebo_worlds/world_models/
 
 cd ..
 cp velocity_control.launch  ~/catkin_ws/src/uuv_simulator/uuv_control/uuv_control_cascaded_pids/launch/
