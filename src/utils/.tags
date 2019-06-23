@@ -1,0 +1,4 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+execute_func_from_t_secs	/home/sagarwal/catkin_ws/src/tartan-sub/src/utils/utils.py	/^def execute_func_from_t_secs(func, time_secs):$/;"	f	language:Python
+execute_func_from_t_secs	/home/sagarwal/catkin_ws/src/tartan-sub/src/utils/utis.py	/^def execute_func_from_t_secs(func, time_secs):$/;"	f	language:Python
+f	/home/sagarwal/catkin_ws/src/tartan-sub/src/utils/utis.py	/^def f(a, b):$/;"	f	language:Python

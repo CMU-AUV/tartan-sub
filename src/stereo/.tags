@@ -1,0 +1,46 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+calibration	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^calibration = np.load(sys.argv[1], allow_pickle=False)$/;"	v	language:Python
+CAMERA_HEIGHT	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^CAMERA_HEIGHT = 720$/;"	v	language:Python
+CAMERA_HEIGHT	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo.py	/^CAMERA_HEIGHT = 720$/;"	v	language:Python
+CAMERA_HEIGHT	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^CAMERA_HEIGHT = 720$/;"	v	language:Python
+CAMERA_WIDTH	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^CAMERA_WIDTH = 1280$/;"	v	language:Python
+CAMERA_WIDTH	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo.py	/^CAMERA_WIDTH = 1280$/;"	v	language:Python
+CAMERA_WIDTH	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^CAMERA_WIDTH = 1280$/;"	v	language:Python
+CHESSBOARD_OPTIONS	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^CHESSBOARD_OPTIONS = (cv2.CALIB_CB_ADAPTIVE_THRESH |$/;"	v	language:Python
+CHESSBOARD_SIZE	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^CHESSBOARD_SIZE = (7, 6)$/;"	v	language:Python
+cropHorizontal	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^def cropHorizontal(image):$/;"	f	language:Python
+cropHorizontal	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^def cropHorizontal(image):$/;"	f	language:Python
+CROP_WIDTH	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^CROP_WIDTH = 960$/;"	v	language:Python
+CROP_WIDTH	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^CROP_WIDTH = 960$/;"	v	language:Python
+DEPTH_VISUALIZATION_SCALE	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^DEPTH_VISUALIZATION_SCALE = 2048$/;"	v	language:Python
+filenames	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^    filenames = random.sample(filenames, MAX_IMAGES)$/;"	v	language:Python
+filenames	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^filenames = list(set(leftFilenames) & set(rightFilenames))$/;"	v	language:Python
+filenames	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^filenames = sorted(filenames)$/;"	v	language:Python
+frameId	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^frameId = 0$/;"	v	language:Python
+getMatchingObjectAndImagePoints	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^def getMatchingObjectAndImagePoints(requestedFilenames,$/;"	f	language:Python
+imageSize	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^imageSize = leftSize$/;"	v	language:Python
+imageSize	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^imageSize = tuple(calibration["imageSize"])$/;"	v	language:Python
+left	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^left = cv2.VideoCapture(1)$/;"	v	language:Python
+left	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo.py	/^left = cv2.VideoCapture(1)$/;"	v	language:Python
+left	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^left = cv2.VideoCapture(0)$/;"	v	language:Python
+leftImageDir	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^leftImageDir = sys.argv[1]$/;"	v	language:Python
+leftMapX	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^leftMapX = calibration["leftMapX"]$/;"	v	language:Python
+leftMapY	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^leftMapY = calibration["leftMapY"]$/;"	v	language:Python
+leftROI	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^leftROI = tuple(calibration["leftROI"])$/;"	v	language:Python
+LEFT_PATH	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^LEFT_PATH = "\/home\/sagarwal\/catkin_ws\/src\/tartan-sub\/src\/stereo\/capture\/left\/{:06d}.jpg"$/;"	v	language:Python
+MAX_IMAGES	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^MAX_IMAGES = 64$/;"	v	language:Python
+objectPoints	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^objectPoints = leftObjectPoints$/;"	v	language:Python
+OBJECT_POINT_ZERO	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^OBJECT_POINT_ZERO = np.zeros((CHESSBOARD_SIZE[0] * CHESSBOARD_SIZE[1], 3),$/;"	v	language:Python
+OPTIMIZE_ALPHA	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^OPTIMIZE_ALPHA = 0.25$/;"	v	language:Python
+outputFile	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^outputFile = sys.argv[3]$/;"	v	language:Python
+readImagesAndFindChessboards	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^def readImagesAndFindChessboards(imageDirectory):$/;"	f	language:Python
+REMAP_INTERPOLATION	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^REMAP_INTERPOLATION = cv2.INTER_LINEAR$/;"	v	language:Python
+right	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo.py	/^right = cv2.VideoCapture(2)$/;"	v	language:Python
+right	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^right = cv2.VideoCapture(1)$/;"	v	language:Python
+rightImageDir	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^rightImageDir = sys.argv[2]$/;"	v	language:Python
+rightMapX	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^rightMapX = calibration["rightMapX"]$/;"	v	language:Python
+rightMapY	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^rightMapY = calibration["rightMapY"]$/;"	v	language:Python
+rightROI	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^rightROI = tuple(calibration["rightROI"])$/;"	v	language:Python
+RIGHT_PATH	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/capture.py	/^RIGHT_PATH = "\/home\/sagarwal\/catkin_ws\/src\/tartan-sub\/src\/stereo\/capture\/right\/{:06d}.jpg"$/;"	v	language:Python
+stereoMatcher	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/stereo_depth.py	/^stereoMatcher = cv2.StereoBM_create()$/;"	v	language:Python
+TERMINATION_CRITERIA	/home/sagarwal/catkin_ws/src/tartan-sub/src/stereo/calibrate.py	/^TERMINATION_CRITERIA = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_MAX_ITER, 30,$/;"	v	language:Python

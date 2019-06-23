@@ -1,0 +1,13 @@
+<launch>
+  <arg name="sitl" default="false" />
+
+  <!-- Launch the mavros connection -->
+  <include file="$(find robosub)/launch/mavros.launch">
+    <arg name="sitl" value="$(arg sitl)" />
+  </include>
+
+  <param name="/position_topic" value="/cmd_pos" type="str" />
+  <param name="/velocity_topic" value="/cmd_vel" type="str" />
+  <param name="/arming_topic" value="/arming" type="str" />
+  <node name="motion" pkg="robosub" type="motion_controller_node" required="true" output="screen" />
+</launch>
