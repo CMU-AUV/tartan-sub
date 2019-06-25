@@ -1,1 +1,1 @@
-from utils import execute_func_from_t_secs
+from utils import execute_func_for_t_secs

@@ -1,0 +1,6 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+cap	/home/sagarwal/catkin_ws/src/tartan-sub/src/test/template_matching_test.py	/^cap = cv.VideoCapture('test480.mp4')$/;"	v	language:Python
+frame_gray	/home/sagarwal/catkin_ws/src/tartan-sub/src/test/template_matching_test.py	/^    frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)$/;"	v	language:Python
+i	/home/sagarwal/catkin_ws/src/tartan-sub/src/test/template_matching_test.py	/^i = 0$/;"	v	language:Python
+templ	/home/sagarwal/catkin_ws/src/tartan-sub/src/test/template_matching_test.py	/^templ = cv.imread('red.jpg')$/;"	v	language:Python
+templ_gray	/home/sagarwal/catkin_ws/src/tartan-sub/src/test/template_matching_test.py	/^    templ_gray = cv.cvtColor(templ, cv.COLOR_BGR2GRAY)$/;"	v	language:Python

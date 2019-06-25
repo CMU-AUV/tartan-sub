@@ -1,6 +1,6 @@
 import time
 
-def execute_func_from_t_secs(func, time_secs):
+def execute_func_for_t_secs(func, time_secs):
     """
     Execute a function for t_secs.
     """

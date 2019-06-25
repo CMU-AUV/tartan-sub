@@ -70,16 +70,13 @@ add_subdirectory(src/constructors)
 add_subdirectory(src/motion)
 
 add_subdirectory(src/preprocess)
-# add_subdirectory(src/utilities)
-# add_subdirectory(src/experimental)
-# 
-# # actions defines a set of action servers that can be used executed by the sub
-# add_subdirectory(src/actions)
-# 
-# # transform defines a set of nodes that convert one message type to another 
-# add_subdirectory(src/transform)
-# add_subdirectory(src/task_manager)
-# add_subdirectory(src/simulation)
+
+add_subdirectory(src/vision_works)
+
+add_subdirectory(src/utils)
+
+add_subdirectory(src/tests)
+
 
 include(cmake/cppcheck.cmake)
 include(cmake/clang-format.cmake)
