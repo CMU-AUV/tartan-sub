@@ -3,7 +3,7 @@
 #include <ros/ros.h>
 #include <cstdint>
 
-#include "robosub/VisualTarget.h"
+#include "tartan_sub/VisualTarget.h"
 
 // Library that provides a basic target follower. Using the position of the
 // target in the camera's view, motion commands are generated to point the sub
@@ -18,7 +18,7 @@ class BasicTargetFollower {
   // Args:
   //  msg->x position of the target on the screen, relative to the center.
   //  msg->y position of the target on the screen, relative to the center.
-  void update(const robosub::VisualTarget::ConstPtr& msg);
+  void update(const tartan_sub::VisualTarget::ConstPtr& msg);
 
   void setkAlt(float kAlt) { kAlt_ = kAlt; }
 

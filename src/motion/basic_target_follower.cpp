@@ -9,11 +9,11 @@
 
 BasicTargetFollower::BasicTargetFollower(float kSpeed, float kAlt, float kYaw)
     : kSpeed_(kSpeed), kAlt_(kAlt), kYaw_(kYaw) {
-  std::string velocity_topic = "/robosub/target_twist";
+  std::string velocity_topic = "/tartan_sub/target_twist";
   vel_pub_ = nh_.advertise<geometry_msgs::Twist>(velocity_topic, 1);
 }
 
-void BasicTargetFollower::update(const robosub::VisualTarget::ConstPtr& msg) {
+void BasicTargetFollower::update(const tartan_sub::VisualTarget::ConstPtr& msg) {
   // Center the values around the middle of the image
   float x_err = msg->x;
   float y_err = msg->y;
