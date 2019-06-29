@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="sitl" default="false" />
+
+  <!-- Launch the mavros connection -->
+  <include file="$(find robosub)/launch/mavros.launch">
+    <arg name="sitl" value="$(arg sitl)" />
+  </include>
+
+ <node pkg="rosbag" type="record" name="nsh_data_collect"
+       args="record -o /sj_camera/left_image_raw /sj_camera/right_image_raw"
+       if="$(arg record_cameras)" />
+
+</launch>

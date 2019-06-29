@@ -24,8 +24,8 @@ right.set(cv2.CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
 left.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
 right.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
 
-left_image_pub = rospy.Publisher("/camera/left_image_raw",Image)
-right_image_pub = rospy.Publisher("/camera/right_image_raw",Image)
+left_image_pub = rospy.Publisher("/sj_camera/left_image_raw", Image)
+right_image_pub = rospy.Publisher("/sj_camera/right_image_raw", Image)
 
 # The distortion in the left and right edges prevents a good calibration, so
 # discard the edges

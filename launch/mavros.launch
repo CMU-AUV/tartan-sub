@@ -14,16 +14,7 @@
   <arg name="log_output" default="screen"/>
 
   <!-- Launch heartbeat node to kill the sub on connection loss -->
-  <!--node pkg="robosub" type="heartbeat.sh" name="heartbeat" required="true"
-      output="$(arg log_output)" unless="$(arg sitl)"/-->
-
-  <!-- Launch mavros with SITL -->
-  <include file="$(find bluerov_ros_playground)/launch/gazebo_sitl.launch" if="$(arg sitl)" >
-    <arg name="fcu_url" value="udp://0.0.0.0:14550@" />
-    <arg name="gui" value="false" />
-    <arg name="pluginlists_yaml" value="$(find robosub)/launch/mavros_pluginlists.yaml"/>
-    <arg name="log_output" value="screen" />
-  </include>
+  <node pkg="robosub" type="heartbeat.sh" name="heartbeat" required="true" output="$(arg log_output)" unless="$(arg sitl)"/>
 
   <!-- Launch real mavros with SITL -->
   <node pkg="mavros" type="mavros_node" name="mavros" required="true" clear_params="true" output="$(arg log_output)" unless="$(arg sitl)">
