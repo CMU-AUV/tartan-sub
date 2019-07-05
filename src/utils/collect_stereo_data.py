@@ -62,7 +62,7 @@ while(True):
     _, rightFrame = right.retrieve()
     rightFrame = cv2.resize(rightFrame, None,fx=0.5, fy=0.66, interpolation = cv2.INTER_AREA)
 
-    print(leftFrame.shape)
+    # print(leftFrame.shape)
 
     # if not (down.grab()):
     #     print("No more frames")
@@ -76,6 +76,7 @@ while(True):
     # right_video.write(rightFrame)
 
     if frameId % 10 == 0:
+        print("Got Image ", frameId)
         cv2.imshow('left', leftFrame)
         cv2.imshow('right', rightFrame)
         # cv2.imshow('down', downFrame)
