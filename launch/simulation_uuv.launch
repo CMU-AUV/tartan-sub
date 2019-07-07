@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
   <!-- This is the launch file for running the robosub code on the uuv_simulator -->
   <!-- Since the simulator has its own controller we only need to post the angular velocity messages-->
@@ -8,12 +9,11 @@
 
   <!-- Start the a underwater world simulation scenario -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-      <arg name="world_name" value="worlds/robosub_2018.world"/>
-      <arg name="paused" value="false"/>
+      <arg name="world_name" value="worlds/dice.world"/>
   </include>
 
   <!-- Add the RexROV vehicle to the simulation (namespace: rexrov) -->
-  <include file="$(find uuv_descriptions)/models/rexrov/launch/upload_rexrov.launch">
+  <include file="$(find uuv_descriptions)/launch/upload_rexrov.launch">
       <arg name="x" default="0"/>
       <arg name="y" default="-25"/>
       <arg name="z" default="-38"/>
