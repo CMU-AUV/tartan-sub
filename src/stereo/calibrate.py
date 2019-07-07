@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import cv2
 
-CHESSBOARD_SIZE = (7, 6)
+CHESSBOARD_SIZE = (9, 6)
 CHESSBOARD_OPTIONS = (cv2.CALIB_CB_ADAPTIVE_THRESH |
         cv2.CALIB_CB_NORMALIZE_IMAGE | cv2.CALIB_CB_FAST_CHECK)
 
@@ -42,7 +42,7 @@ def readImagesAndFindChessboards(imageDirectory):
         print("Cache file at {0} not found".format(cacheFile))
 
     print("Reading images at {0}".format(imageDirectory))
-    imagePaths = glob.glob("{0}/*.jpg".format(imageDirectory))
+    imagePaths = glob.glob("{0}/*.JPG".format(imageDirectory))
 
     filenames = []
     objectPoints = []

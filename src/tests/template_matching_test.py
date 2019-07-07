@@ -37,7 +37,8 @@ def tem_match(orig, src, templ):
         cv.imshow('Matching Result', orig_res)
         cv.imshow('Detected Point', orig)
 
-cap = cv.VideoCapture('robosub_buoy.mp4')
+# cap = cv.VideoCapture('robosub_buoy.mp4')
+cap = cv.VideoCapture(1)
 templ = cv.imread('buoy_template.png')
 
 # templ = cv.resize(templ, None,fx=0.5, fy=0.5, interpolation = cv.INTER_AREA)
@@ -47,7 +48,7 @@ while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
 
-    frame = cv.resize(frame, None,fx=0.5, fy=0.5, interpolation = cv.INTER_AREA)
+    # frame = cv.resize(frame, None,fx=0.5, fy=0.5, interpolation = cv.INTER_AREA)
 
     print("Vid:", frame.shape)
     print("Template:", templ.shape)
@@ -66,6 +67,7 @@ while(True):
 
     cv.waitKey(10)
     i += 1
+
 # When everything done, release the capture
 cap.release()
 cv.destroyAllWindows()

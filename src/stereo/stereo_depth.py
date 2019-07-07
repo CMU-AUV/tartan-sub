@@ -23,8 +23,8 @@ CAMERA_WIDTH = 1280
 CAMERA_HEIGHT = 720
 
 # TODO: Use more stable identifiers
-left = cv2.VideoCapture(0)
-right = cv2.VideoCapture(1)
+left = cv2.VideoCapture(1)
+right = cv2.VideoCapture(2)
 
 # Increase the resolution
 left.set(cv2.CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
@@ -62,19 +62,22 @@ while(True):
         break
 
     _, leftFrame = left.retrieve()
-    leftFrame = cropHorizontal(leftFrame)
+    # leftFrame = cropHorizontal(leftFrame)
     leftHeight, leftWidth = leftFrame.shape[:2]
     _, rightFrame = right.retrieve()
-    rightFrame = cropHorizontal(rightFrame)
+    # rightFrame = cropHorizontal(rightFrame)
     rightHeight, rightWidth = rightFrame.shape[:2]
 
-    if (leftWidth, leftHeight) != imageSize:
-        print("Left camera has different size than the calibration data")
-        break
+    cv2.imshow('left raw', leftFrame)
+    cv2.imshow('right raw', rightFrame)
 
-    if (rightWidth, rightHeight) != imageSize:
-        print("Right camera has different size than the calibration data")
-        break
+    # if (leftWidth, leftHeight) != imageSize:
+    #     print("Left camera has different size than the calibration data")
+    #     break
+
+    # if (rightWidth, rightHeight) != imageSize:
+    #     print("Right camera has different size than the calibration data")
+    #     break
 
     fixedLeft = cv2.remap(leftFrame, leftMapX, leftMapY, REMAP_INTERPOLATION)
     fixedRight = cv2.remap(rightFrame, rightMapX, rightMapY, REMAP_INTERPOLATION)
