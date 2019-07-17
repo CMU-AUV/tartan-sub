@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <!-- Launch the mavros connection -->
+  <include file="$(find tartan_sub)/launch/mavros.launch"/>
+  <include file="$(find tartan_sub)/launch/motion.launch"/>
+
+</launch>

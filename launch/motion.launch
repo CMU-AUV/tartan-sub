@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="sitl" default="false" />
 
   <!-- Launch the mavros connection -->
   <include file="$(find tartan_sub)/launch/mavros.launch">
-    <arg name="sitl" value="$(arg sitl)" />
   </include>
 
   <param name="/position_topic" value="/cmd_pos" type="str" />

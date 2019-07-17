@@ -77,6 +77,8 @@ add_subdirectory(src/utils)
 
 add_subdirectory(src/tests)
 
+add_subdirectory(src/mission_execute)
+
 
 include(cmake/cppcheck.cmake)
 include(cmake/clang-format.cmake)
