@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import sys
 import cv2
 
@@ -12,7 +13,7 @@ from std_msgs.msg import Int8, Float32
 class vamp_visual_servoing(object):
 	def __init__(self):
 		self.bbox_sub = rospy.Subscriber("/darknet_ros/bounding_boxes",BoundingBoxes,self.callback)
-		self.des_vel_pub = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
+		self.des_vel_pub = rospy.Publisher("/rexrov/cmd_vel", Twist, queue_size=1)
 
 		self.k_yaw = 0.0005
 		self.k_alt = 0.0010

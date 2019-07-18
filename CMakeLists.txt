@@ -18,6 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
   sensor_msgs
+  darknet_ros
+  darknet_ros_msgs
   roslaunch
   tf
 )
