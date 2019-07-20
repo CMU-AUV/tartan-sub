@@ -2,11 +2,11 @@
 import rospy
 from std_msgs.msg import Bool
 
-from config import Config
 
 class Armer(object):
-    def __init__(self):
-        self.pub = rospy.Publisher(Config.arming_topic, Bool, queue_size=1)
+    def __init__(self, run_config):
+        self.config = run_config
+        self.pub = rospy.Publisher(self.config.arming_topic, Bool, queue_size=1)
 
     def arm(self):
         msg = Bool()

@@ -1,34 +1,41 @@
 #!/usr/bin/env python
 import rospy
 
-
-from mover import Mover
+from motion_utilities import Mover
 from gate import Gate
-from visual_servo import DarknetVisualServo
-from config import Config
+from vamp_visual_servo import VampVisualServoing
+from config import ConfigMap, SimConfig, SubConfig
 from armer import Armer
 
 
-class ControlSub(object):
-    def __init__(self):
-        self.mover = Mover()
-        self.armer = Armer()
+class SubController(object):
+    def __init__(self, run_config):
+        self.mover = Mover(run_config)
+        self.armer = Armer(run_config)
 
 
 if __name__ == "__main__":
     rospy.init_node('main', anonymous=True)
 
-    gate = Gate()
-    dice = DarknetVisualServo(Config.darknet_topic, Config.zed_camera_dims, 'D6')
+    run_config = ConfigMap['Sim']
+    sub_controller = SubController(run_config)
 
-    print("Arming")
-    armer.arm()
+    # gate = Gate(sub_controller)
+    vamp = VampVisualServoing(sub_controller, run_config)
 
-    print("Gate")
-    gate.run()
+    # print("Arming")
+    # armer.arm()
+    #
+    # print("Gate")
+    # gate.run()
+    #
+    # print("Turning")
+    # mover.turn(Config.dice_yaw_time, Config.dice_yaw_speed)
 
-    print("Turning")
-    mover.turn(Config.dice_yaw_time, Config.dice_yaw_speed)
+    print("Vamp")
+    vamp.execute()
 
-    print("Dice")
-    vamp.run()
+    rospy.spin()
+
+if __name__ == '__main__':
+    main(sys.argv)

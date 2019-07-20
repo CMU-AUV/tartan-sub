@@ -4,17 +4,17 @@ from geometry_msgs.msg import Twist
 import rospy
 import time
 
-from config import Config
-
 class Mover(object):
     hz = 10
-    def __init__(self):
-        self.pub = rospy.Publisher(Config.mover_topic, Twist, queue_size=1)
+    def __init__(self, run_config):
+        self.config = run_config
+        self.pub = rospy.Publisher(self.config.mover_topic, Twist, queue_size=1)
         self.hz = 10
 
     def _common_end_(self):
         if(rospy.is_shutdown()):
             return
+        print("Ending")
         # Stop the sub once complete
         self.pub.publish(Twist())
 
@@ -40,5 +40,5 @@ class Mover(object):
         msg.angular.z = speed
         self._send_message_duration_(msg, duration)
 
-    def publish(twist):
-        self.pub.publish(twist)
+    def publish(self, msg):
+        self.pub.publish(msg)

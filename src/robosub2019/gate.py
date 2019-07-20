@@ -2,9 +2,8 @@
 import rospy
 
 from task import Task
-from config import Config
 
-class Gate(task):
+class Gate(Task):
     def __init__(self, sub_controller):
         self.sub_controller = sub_controller
 
