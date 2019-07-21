@@ -42,8 +42,8 @@ class SimConfig(object):
     right_camera_topic = "/rexrov/rexrov/cameraright/camera_image"
 
     # Camara Params
-    camera_dims_x = 640
-    camera_dims_y = 480
+    camera_dims_x = 768
+    camera_dims_y = 492
 
     # Gate
     gate_depth_speed = -0.4
