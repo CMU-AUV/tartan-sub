@@ -15,6 +15,7 @@ def set_cam_params(cam_num):
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, CAMERA_WIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CAMERA_HEIGHT)
     # cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
+    cap.set(cv2.CAP_PROP_FPS, 5)
     return cap
 
 
@@ -54,7 +55,7 @@ while(True):
     downFrame = cv2.resize(downFrame, None,fx=0.5, fy=0.66, interpolation = cv2.INTER_AREA)
 
 
-    if frameId % 10 == -1:
+    if frameId % 100 == 1:
         print("Got Image ", frameId)
         cv2.imshow('left', leftFrame)
         cv2.imshow('right', rightFrame)
@@ -62,7 +63,7 @@ while(True):
 
     left_image_pub.publish(BRIDGE.cv2_to_imgmsg(leftFrame, "bgr8"))
     right_image_pub.publish(BRIDGE.cv2_to_imgmsg(rightFrame, "bgr8"))
-    down_image_pub.publish(BRIDGE.cv2_to_imgmsg(rightFrame, "bgr8"))
+    down_image_pub.publish(BRIDGE.cv2_to_imgmsg(downFrame, "bgr8"))
 
     if cv2.waitKey(5) & 0xFF == ord('q'):
         break
