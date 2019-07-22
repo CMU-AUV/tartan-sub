@@ -15,25 +15,34 @@ class SubController(object):
 
 
 if __name__ == "__main__":
-    rospy.init_node('main', anonymous=True)
+    rospy.init_node('tartan_19_controller', anonymous=True)
 
-    run_config = ConfigMap['Sim']
+    run_config = ConfigMap['Sub']
     sub_controller = SubController(run_config)
 
     # gate = Gate(sub_controller)
-    vamp = VampVisualServoing(sub_controller, run_config)
+    # vamp = VampVisualServoing(sub_controller, run_config)
 
-    # print("Arming")
-    # armer.arm()
-    #
+    print("Arming")
+    sub_controller.armer.arm()
+
+    # print("Motion Test")
+    # sub_controller.mover.dive(1.0, -0.1)
+
+    # sub_controller.mover.forward(1.0, -0.1)
+
+    # sub_controller.mover.turn(1.0, -0.2)
+
+    # sub_controller.mover.turn(1.0, 0.2)
+
     # print("Gate")
     # gate.run()
-    #
+
     # print("Turning")
     # mover.turn(Config.dice_yaw_time, Config.dice_yaw_speed)
 
-    print("Vamp")
-    vamp.execute()
+    # print("Vamp")
+    # vamp.execute()
 
     rospy.spin()
 
