@@ -28,9 +28,9 @@ class SubConfig(object):
     vamp_yaw_speed = 0.2
     vamp_yaw_time = 0.7
 
-    visual_servo_kp_yaw = 0.003
-    visual_servo_kp_alt = 0.003
-    target_seq = ['jia']
+    visual_servo_kp_yaw = -0.001
+    visual_servo_kp_alt = -0.001
+    target_seq = ['Vet']
 
 class SimConfig(object):
     # Topics

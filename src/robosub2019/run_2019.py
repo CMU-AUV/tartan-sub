@@ -21,19 +21,15 @@ if __name__ == "__main__":
     sub_controller = SubController(run_config)
 
     # gate = Gate(sub_controller)
-    # vamp = VampVisualServoing(sub_controller, run_config)
+    vamp = VampVisualServoing(sub_controller, run_config)
 
     print("Arming")
     sub_controller.armer.arm()
 
     # print("Motion Test")
-    # sub_controller.mover.dive(1.0, -0.1)
+    sub_controller.mover.dive(3.0, -0.2)
 
-    # sub_controller.mover.forward(1.0, -0.1)
-
-    # sub_controller.mover.turn(1.0, -0.2)
-
-    # sub_controller.mover.turn(1.0, 0.2)
+    # sub_controller.mover.forward(5.0, 0.3)
 
     # print("Gate")
     # gate.run()
@@ -41,8 +37,10 @@ if __name__ == "__main__":
     # print("Turning")
     # mover.turn(Config.dice_yaw_time, Config.dice_yaw_speed)
 
-    # print("Vamp")
-    # vamp.execute()
+    print("Vamp")
+    vamp.execute()
+
+    sub_controller.armer.disarm()
 
     rospy.spin()
 
