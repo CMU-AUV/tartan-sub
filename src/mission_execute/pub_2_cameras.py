@@ -27,8 +27,8 @@ frameId = 0
 
 rospy.init_node('camera_publisher', anonymous=True)
 
-left = set_cam_params(0)
-right = set_cam_params(1)
+left = set_cam_params(1)
+right = set_cam_params(0)
 
 
 # Grab both frames first, then retrieve to minimize latency between cameras
@@ -46,15 +46,16 @@ while(True):
     _, rightFrame = right.retrieve()
     rightFrame = cv2.resize(rightFrame, None,fx=0.5, fy=0.66, interpolation = cv2.INTER_AREA)
 
+    print("Got Image ", frameId)
+
     if frameId % 10 == -1:
-        print("Got Image ", frameId)
         cv2.imshow('left', leftFrame)
         cv2.imshow('right', rightFrame)
 
     left_image_pub.publish(BRIDGE.cv2_to_imgmsg(leftFrame, "bgr8"))
     right_image_pub.publish(BRIDGE.cv2_to_imgmsg(rightFrame, "bgr8"))
 
-    if cv2.waitKey(5) & 0xFF == ord('q'):
+    if cv2.waitKey(15) & 0xFF == ord('q'):
         break
 
     frameId += 1
