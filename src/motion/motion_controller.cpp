@@ -5,13 +5,13 @@
 #include "constructors/Point.h"
 #include "constructors/PoseStamped.h"
 #include "constructors/Quaternion.h"
-#include "constructors/TwistStamped.h"
+#include "constructors/Twist.h"
 #include "constructors/Vector3.h"
 
 MotionController::MotionController() {
   // Zero all setpoints initially
   setpoint_pos_ = PoseStamped();
-  setpoint_vel_ = TwistStamped();
+  setpoint_vel_ = Twist();
 }
 
 void MotionController::Start() {
@@ -32,7 +32,7 @@ void MotionController::SetPose(const geometry_msgs::PoseStamped pos) {
   setpoint_pos_ = pos;
 }
 
-void MotionController::SetTwist(const geometry_msgs::TwistStamped vel) {
+void MotionController::SetTwist(const geometry_msgs::Twist vel) {
   ROS_INFO("%s: Received new twist setpoint", node_name_.c_str());
   // Cancel previous timeout
   vel_timer_.stop();
@@ -51,6 +51,6 @@ void MotionController::Update(const ros::TimerEvent &event) { DoUpdate(); }
 // Set velocity to zero
 void MotionController::VelocityTimeout(const ros::TimerEvent &event) {
   ROS_ERROR("Velocity setpoint timed out");
-  setpoint_vel_ = TwistStamped(Header(), Twist());
+  setpoint_vel_ = Twist();
   vel_timer_.stop();
 }

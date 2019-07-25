@@ -1,7 +1,7 @@
 #ifndef MOTION_CONTROLLER_H
 #define MOTION_CONTROLLER_H
 #include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/TwistStamped.h>
+#include <geometry_msgs/Twist.h>
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <string>
@@ -17,7 +17,7 @@ class MotionController {
   void SetPose(const geometry_msgs::PoseStamped pose);
 
   // Set velocity target
-  void SetTwist(const geometry_msgs::TwistStamped vel);
+  void SetTwist(const geometry_msgs::Twist vel);
 
   // Arm or disarm the sub
   void Arming(const std_msgs::Bool arm);
@@ -36,7 +36,7 @@ class MotionController {
   void VelocityTimeout(const ros::TimerEvent &event);
 
   geometry_msgs::PoseStamped setpoint_pos_;
-  geometry_msgs::TwistStamped setpoint_vel_;
+  geometry_msgs::Twist setpoint_vel_;
 
   ros::Subscriber pose_sub_;
   ros::Subscriber twist_sub_;
