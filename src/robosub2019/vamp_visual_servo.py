@@ -17,20 +17,14 @@ from cv_bridge import CvBridge, CvBridgeError
 from task import Task
 from vision_utilities import Bbox, Tracker
 
-# class VampState(IntEnum):
-# 	__order__ = "NothingDetected FirstDetection Yolo Tracker"
-# 	NothingDetected = 1
-# 	FirstDetection = 2
-# 	Yolo = 3
-# 	Tracker = 4
-
 class VampState(IntEnum):
 	__order__ = "NothingDetected FirstFollowing FindSecond SecondFollowing Done"
 	NothingDetected = 1
 	FirstFollowing = 2
-	FindSecond = 3
-	SecondFollowing = 4
-	Done = 5
+	GotoSecond = 3
+	FindSecond = 4
+	SecondFollowing = 5
+	Done = 6
 
 
 class VampVisualServoing(Task):
@@ -66,14 +60,17 @@ class VampVisualServoing(Task):
 
 	def jerk_callback(self, msg):
 		jerk = msg.data
-		print("Jerk: " + str(jerk))
-		if jerk > 1.5:
+		# print("Jerk: " + str(jerk))
+		if jerk > 1.5 and self.state != VampState.FindSecond:
 			if self.state == VampState.FirstFollowing:
-				self.state = VampState.FindSecond
+				self.mover.forward(20.0, -self.linear_speed_x)
+				self.state = VampState.GotoSecond
 			if self.state == VampState.SecondFollowing:
+				self.mover.forward(15.0, -self.linear_speed_x)
 				self.state == VampState.Done
 
 	def bbox_callback(self, msg):
+		target_vamp = 'None'
 		if self.state <= VampState.FirstFollowing:
 			target_vamp = self.config.target_seq[0]
 		elif self.state >= VampState.FindSecond:
@@ -102,6 +99,7 @@ class VampVisualServoing(Task):
 				self.state = VampState.FirstFollowing
 			elif self.state >= VampState.FindSecond:
 				self.state = VampState.SecondFollowing
+		cv2.waitKey(20)
 
 
 	def target_follower(self, target_x, target_y):
@@ -120,19 +118,24 @@ class VampVisualServoing(Task):
 	def execute(self):
 		while((not rospy.is_shutdown())):
 			self.update_idx += 1
-			if (self.update_idx%5 != 0):
+			if (self.update_idx%100 != 0):
 				continue
-			print("Current State: " + str(self.state))
+			print("Current State: " + str(self.state) + " idx " + str(self.update_idx))
+
 			if self.state == VampState.NothingDetected:
 				# print('Moving forward')
-				self.mover.forward(0.1, self.linear_speed_x)
+				self.mover.forward(0.01, self.linear_speed_x)
 			elif self.state == VampState.FirstFollowing:
 				# print('Hitting Vamp')
 				self.target_follower(self.target_center_x, self.target_center_y)
+			elif self.state == VampState.GotoSecond:
+				self.mover.dive(7.0, 2*self.linear_speed_x)
+				self.mover.turn(5.0, -self.linear_speed_x)
+				self.mover.forward(40.0, 2*self.linear_speed_x)
+				self.mover.turn(13.0, -self.linear_speed_x)
+				self.mover.dive(7.0, -2*self.linear_speed_x)
+				self.state = VampState.FindSecond
 			elif self.state == VampState.FindSecond:
-				self.mover.forward(2.0, -self.linear_speed_x)
-				self.mover.dive(2.0, self.linear_speed_x)
-				self.mover.forward(4.0, self.linear_speed_x)
-				self.mover.turn(3.0, self.linear_speed_x)
+				self.mover.forward(0.01, self.linear_speed_x)
 			elif self.state == VampState.SecondFollowing:
 				self.target_follower(self.target_center_x, self.target_center_y)
