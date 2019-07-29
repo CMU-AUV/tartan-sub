@@ -25,6 +25,9 @@ class SubConfig(object):
     # Vamp Visual Servo
     visual_servo_forward_speed = 0.2
 
+    imu_topic = "/mavros/imu"
+    jerk_topic = "mavros/jerk"
+
     vamp_yaw_speed = 0.2
     vamp_yaw_time = 0.7
 
@@ -40,6 +43,9 @@ class SimConfig(object):
     camera_topic = "/rexrov/rexrov/camera/camera_image"
     left_camera_topic = "/rexrov/rexrov/cameraleft/camera_image"
     right_camera_topic = "/rexrov/rexrov/cameraright/camera_image"
+
+    imu_topic = '/rexrov/imu'
+    jerk_topic = '/rexrov/jerk'
 
     # Camara Params
     camera_dims_x = 768
@@ -61,7 +67,7 @@ class SimConfig(object):
 
     visual_servo_kp_alt = -0.0010
     visual_servo_kp_yaw = 0.0005
-    target_seq = ['jia']
+    target_seq = ['jia', 'Vet']
 
 ConfigMap = {
     "Sub" : SubConfig, "Sim" : SimConfig
