@@ -29,13 +29,9 @@ if __name__ == "__main__":
     # sub_controller.armer.arm()
 
     # print("Motion Test")
-    # sub_controller.mover.dive(1.0, -0.1)
+    sub_controller.mover.dive(3.0, -0.2)
 
-    # sub_controller.mover.forward(1.0, -0.1)
-
-    # sub_controller.mover.turn(1.0, -0.2)
-
-    # sub_controller.mover.turn(1.0, 0.2)
+    # sub_controller.mover.forward(5.0, 0.3)
 
     # print("Gate")
     # gate.execute()
@@ -45,6 +41,8 @@ if __name__ == "__main__":
 
     print("Vamp")
     vamp.execute()
+    
+    sub_controller.armer.disarm()
 
     rospy.spin()
 

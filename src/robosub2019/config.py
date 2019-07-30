@@ -32,8 +32,8 @@ class SubConfig(object):
     imu_topic = "/mavros/imu"
     jerk_topic = "mavros/jerk"
 
-    visual_servo_kp_yaw = 0.003
-    visual_servo_kp_alt = 0.003
+    visual_servo_kp_yaw = -0.001
+    visual_servo_kp_alt = -0.001
     target_seq = ['jia', 'Vet']
 
 class SimConfig(object):
