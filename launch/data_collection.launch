@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 
 <launch>
-  <arg name="sitl" default="false" />
-
-  <!-- Launch the mavros connection -->
-  <include file="$(find tartan_sub)/launch/mavros.launch">
-    <arg name="sitl" value="$(arg sitl)" />
-  </include>
 
  <node pkg="tartan_sub" name="pub_2_cameras" type="pub_2_cameras.py"  output="screen"/>
  <node pkg="tartan_sub" name="pub_down_cameras" type="pub_down_cameras.py"  output="screen"/>
