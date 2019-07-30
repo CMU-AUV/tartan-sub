@@ -63,10 +63,10 @@ class VampVisualServoing(Task):
 		# print("Jerk: " + str(jerk))
 		if jerk > 1.5 and self.state != VampState.FindSecond:
 			if self.state == VampState.FirstFollowing:
-				self.mover.forward(20.0, -self.linear_speed_x)
+				self.mover.forward(self.config.visual_servo_back1_time, -self.linear_speed_x)
 				self.state = VampState.GotoSecond
 			if self.state == VampState.SecondFollowing:
-				self.mover.forward(15.0, -self.linear_speed_x)
+				self.mover.forward(self.config.visual_servo_back2_time, -self.linear_speed_x)
 				self.state == VampState.Done
 
 	def bbox_callback(self, msg):
@@ -129,11 +129,11 @@ class VampVisualServoing(Task):
 				# print('Hitting Vamp')
 				self.target_follower(self.target_center_x, self.target_center_y)
 			elif self.state == VampState.GotoSecond:
-				self.mover.dive(7.0, 2*self.linear_speed_x)
-				self.mover.turn(5.0, -self.linear_speed_x)
-				self.mover.forward(40.0, 2*self.linear_speed_x)
-				self.mover.turn(13.0, -self.linear_speed_x)
-				self.mover.dive(7.0, -2*self.linear_speed_x)
+				self.mover.dive(self.config.visual_servo_dive_time, 2*self.linear_speed_x)
+				self.mover.turn(self.config.visual_servo_turn1_time, -self.linear_speed_x)
+				self.mover.forward(self.config.visual_servo_forward_time, 2*self.linear_speed_x)
+				self.mover.turn(self.config.visual_servo_turn2_time, -self.linear_speed_x)
+				self.mover.dive(self.config.visual_servo_dive_time, -2*self.linear_speed_x)
 				self.state = VampState.FindSecond
 			elif self.state == VampState.FindSecond:
 				self.mover.forward(0.01, self.linear_speed_x)
