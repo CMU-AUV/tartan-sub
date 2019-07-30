@@ -29,6 +29,15 @@ class SubConfig(object):
     # Vamp Visual Servo
     visual_servo_forward_speed = 0.2
 
+    visual_servo_dive_time = 2.0
+    visual_servo_turn1_time = 2.0
+    visual_servo_turn2_time = 5.0
+    visual_servo_forward_time = 5.0
+
+    visual_servo_back1_time = 5.0
+    visual_servo_back2_time = 5.0
+
+
     imu_topic = "/mavros/imu"
     jerk_topic = "mavros/jerk"
 
@@ -64,6 +73,15 @@ class SimConfig(object):
 
     # Vamp Visual Servo
     visual_servo_forward_speed = 0.2
+
+    visual_servo_dive_time = 7.0
+    visual_servo_turn1_time = 5.0
+    visual_servo_turn2_time = 13.0
+    visual_servo_forward_time = 40.0
+
+    visual_servo_back1_time = 20.0
+    visual_servo_back2_time = 15.0
+
 
     imu_topic = '/rexrov/imu'
     jerk_topic = '/rexrov/jerk'
