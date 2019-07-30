@@ -8,7 +8,9 @@
     <arg name="sitl" value="$(arg sitl)" />
   </include>
 
- <node pkg="rosbag" type="record" name="nsh_data_collect"
-       args="record /nsh_data_collect sj_camera/left_image_raw /sj_camera/right_image_raw" />
+ <node pkg="tartan_sub" name="pub_2_cameras" type="pub_2_cameras.py"  output="screen"/>
+ <node pkg="tartan_sub" name="pub_down_cameras" type="pub_down_cameras.py"  output="screen"/>
 
+ <node pkg="rosbag" type="record" name="robosub_data_collect"
+       args="record /sj_camera/left_image_raw /sj_camera/right_image_raw /sj_camera/down_image_raw" />
 </launch>
