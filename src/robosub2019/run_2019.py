@@ -21,9 +21,14 @@ if __name__ == "__main__":
     run_config = ConfigMap['Sim']
     sub_controller = SubController(run_config)
 
+<<<<<<< Updated upstream
     gate = Gate(sub_controller, run_config)
     vamp = VampVisualServoing(sub_controller, run_config)
     jerk = AccelGraph(run_config)
+=======
+    # gate = Gate(sub_controller)
+    # vamp = VampVisualServoing(sub_controller, run_config)
+>>>>>>> Stashed changes
 
     # print("Arming")
     # sub_controller.armer.arm()
@@ -40,9 +45,15 @@ if __name__ == "__main__":
     # mover.turn(Config.dice_yaw_time, Config.dice_yaw_speed)
 
     print("Vamp")
+<<<<<<< Updated upstream
     vamp.execute()
     
     sub_controller.armer.disarm()
+=======
+    # vamp.execute()
+
+    # sub_controller.armer.disarm()
+>>>>>>> Stashed changes
 
     rospy.spin()
 

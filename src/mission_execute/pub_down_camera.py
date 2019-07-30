@@ -41,7 +41,7 @@ while(True):
     downFrame = cv2.resize(downFrame, None,fx=0.5, fy=0.66, interpolation = cv2.INTER_AREA)
 
 
-    if frameId % 10 == -1:
+    if frameId % 10 == 1:
         print("Got Image ", frameId)
         cv2.imshow('down', downFrame)
 

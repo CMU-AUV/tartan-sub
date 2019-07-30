@@ -85,7 +85,8 @@ def preprocess_image(orig):
 
 class Tracker(object):
     def __init__(self):
-		self.tracker = cv2.TrackerTLD_create()
+		# self.tracker = cv2.TrackerTLD_create()
+                self.tracker = None
 
     def initialize(self, init_img, init_bbox, visualize=False):
         self.tracker.init(init_img, init_bbox.box)
