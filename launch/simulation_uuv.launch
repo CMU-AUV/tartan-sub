@@ -14,15 +14,18 @@
 
   <!-- Add the RexROV vehicle to the simulation (namespace: rexrov) -->
   <include file="$(find uuv_descriptions)/launch/upload_rexrov.launch">
-      <arg name="x" default="-25"/>
-      <arg name="y" default="-35"/>
-      <arg name="z" default="-8"/>
-      <arg name="yaw" default="3.5066"/>
+      <arg name="x" default="-35"/>
+      <arg name="y" default="-20"/>
+      <arg name="z" default="-40"/>
+      <arg name="yaw" default="4.5538"/>
   </include>
 
   <include file="$(find uuv_control_cascaded_pid)/launch/velocity_control.launch">
       <arg name="uuv_name" value="rexrov"/>
       <arg name="model_name" value="rexrov"/>
   </include>
+
+  <node pkg="rqt_plot" name="jerk" type="rqt_plot" args="/rexrov/jerk"/>
+
 
 </launch>

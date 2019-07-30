@@ -20,9 +20,10 @@ class Mover(object):
 
     def _send_message_duration_(self, msg, duration):
         end_time = duration + time.time()
+        print(msg)
         while time.time() < end_time and not rospy.is_shutdown():
             self.pub.publish(msg)
-            time.sleep(1.0/self.hz)
+            # time.sleep(1.0/self.hz)
         self._common_end_()
 
     def dive(self, duration, speed=-0.4):
@@ -41,4 +42,5 @@ class Mover(object):
         self._send_message_duration_(msg, duration)
 
     def publish(self, msg):
+        print(msg)
         self.pub.publish(msg)
