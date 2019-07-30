@@ -22,29 +22,12 @@ if __name__ == "__main__":
     sub_controller = SubController(run_config)
 
     gate = Gate(sub_controller, run_config)
-    vamp = VampVisualServoing(sub_controller, run_config)
-    jerk = AccelGraph(run_config)
 
-    # print("Arming")
-    # sub_controller.armer.arm()
+    print("Arming")
+    sub_controller.armer.arm()
 
-    # print("Motion Test")
-    # sub_controller.mover.dive(1.0, -0.1)
-
-    # sub_controller.mover.forward(1.0, -0.1)
-
-    # sub_controller.mover.turn(1.0, -0.2)
-
-    # sub_controller.mover.turn(1.0, 0.2)
-
-    # print("Gate")
-    # gate.execute()
-
-    # print("Turning")
-    # mover.turn(Config.dice_yaw_time, Config.dice_yaw_speed)
-
-    print("Vamp")
-    vamp.execute()
+    print("Gate")
+    gate.execute()
 
     rospy.spin()
 

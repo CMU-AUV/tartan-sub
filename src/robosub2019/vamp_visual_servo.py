@@ -116,7 +116,7 @@ class VampVisualServoing(Task):
 		self.mover.publish(msg)
 
 	def execute(self):
-		while((not rospy.is_shutdown())):
+		while(not rospy.is_shutdown() and self.state == VampState.Done ):
 			self.update_idx += 1
 			if (self.update_idx%100 != 0):
 				continue

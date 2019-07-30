@@ -59,6 +59,14 @@ class bins():
                 high_n_bins[1].idx = idx
         return high_n_bins
 
+    def calculate_max_1(self):
+        high_n_bins = [val_idx() for i in range(1)]
+        for idx, v in enumerate(self.vals):
+            if(len(v) > high_n_bins[0].val):
+                high_n_bins[0].val = len(v)
+                high_n_bins[0].idx = idx
+        return high_n_bins
+
 
 def check_bbox_hsv(s_img, bbox, threshold= 0.30):
     idx = np.where(s_img[bbox.tr : bbox.tr + bbox.h, bbox.tl : bbox.tl + bbox.w] < 200)
@@ -66,65 +74,6 @@ def check_bbox_hsv(s_img, bbox, threshold= 0.30):
         return False
     else:
         return True
-
-def tem_match(orig, src, template):
-    img = src.copy()
-    img_w, img_h = src.shape
-
-    w, h = template.shape[::-1]
-
-    BBox = list()
-    bbox_bins = bins(img_w, 10)
-    orig_res = None
-
-    bbox_added = 0
-    for i in range(3):
-        resize_i = cv.resize(img, None,fx=1/2**(0.5*i), fy=1/2**(0.5*i), interpolation = cv.INTER_AREA)
-        # print(resize_i.shape)
-        # Apply template Matching
-        res = cv.matchTemplate(resize_i, template, eval('cv.TM_CCOEFF_NORMED'))
-        if i == 0:
-            orig_res = res
-        # min_val, max_val, min_loc, max_loc = cv.minMaxLoc(res)
-        # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
-        threshold = 0.65
-        loc = np.where( res >= threshold)
-
-        for pt in zip(*loc[::-1]):
-            tl = pt[0]*int(2**(0.5*i))
-            tr = pt[1]*int(2**(0.5*i))
-            # cv.rectangle(orig, (tl,tr), ((pt[0] + w), (pt[1] + h)), (0,0,255), 1)
-            # print("Width: " + str(w) + " Height: " + str(h))
-
-            bb = bbox(tl, tr, w, h)
-            # BBox.append(bb)
-            if(check_bbox_hsv(resize_i, bb, 0.20)):
-                bbox_added += 1
-                # print("bbox added")
-                bbox_bins.add(bb)
-
-    if(bbox_added >= 2):
-        print([len(bbox_bins.vals[i]) for i in range(len(bbox_bins.vals))])
-
-        good_bbox_idx = bbox_bins.calculate_max_2()
-        print("Bins: ")
-        print(good_bbox_idx[0].idx, good_bbox_idx[0].val)
-        print(good_bbox_idx[1].idx, good_bbox_idx[1].val)
-
-        if(good_bbox_idx[0].idx > 0):
-            pt1_up = (bbox_bins.bins[good_bbox_idx[0].idx],0)
-            pt1_down = (bbox_bins.bins[good_bbox_idx[0].idx],img_h)
-            cv.line(orig, pt1_up, pt1_down, (0,0,255), 1)
-
-        if(good_bbox_idx[1].idx > 0):
-            pt2_up = (bbox_bins.bins[good_bbox_idx[1].idx], 0)
-            pt2_down = (bbox_bins.bins[good_bbox_idx[1].idx], img_h)
-            cv.line(orig, pt2_up, pt2_down, (0,0,255), 1)
-
-    # cv.imshow('Matching Result', orig_res)
-    # cv.imshow('Detected Point', orig)
-    return [len(bbox_bins.vals[i]) for i in range(len(bbox_bins.vals))]
-
 
 def preprocess_image(orig):
     image = orig.copy()
