@@ -18,7 +18,7 @@ class SubController(object):
 if __name__ == "__main__":
     rospy.init_node('tartan_19_controller', anonymous=True)
 
-    run_config = ConfigMap['Sub']
+    run_config = ConfigMap['Sim']
     sub_controller = SubController(run_config)
 
     roll = BarrelRoll(sub_controller)

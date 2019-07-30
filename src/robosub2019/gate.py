@@ -4,6 +4,7 @@ import roslib
 
 import cv2 as cv
 from task import Task
+from enum import IntEnum
 
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
@@ -11,10 +12,10 @@ from cv_bridge import CvBridge, CvBridgeError
 from vision_utilities import bbox, val_idx, bins, preprocess_image
 
 class GateState(IntEnum):
-	__order__ = "NothingDetected SomethingDetected Done"
-	NothingDetected = 1
+    __order__ = "NothingDetected SomethingDetected Done"
+    NothingDetected = 1
     SomethingDetected = 2
-	Done = 3
+    Done = 3
 
 
 class Gate(Task):
@@ -22,14 +23,11 @@ class Gate(Task):
         self.mover = sub_controller.mover
         self.config = run_config
         self.camera_sub = rospy.Subscriber(self.config.camera_topic, Image, self.image_callback)
-
-		self.bridge = CvBridge()
+        self.bridge = CvBridge()
         self.templ_left = preprocess_image(cv.imread(self.config.templates_folder + '/left_gate.jpg'))
         self.templ_right = preprocess_image(cv.imread(self.config.templates_folder + '/right_gate.jpg'))
         self.templ_middle = preprocess_image(cv.imread(self.config.templates_folder + '/middle_gate.jpg'))
-
         self.visualize = run_config.visualize
-
         self.sub_center = self.config.camera_dims_x/2
 
     def execute(self, type='naive'):
@@ -50,14 +48,14 @@ class Gate(Task):
             self.mover.dive(self.config.gate_depth_time, self.config.gate_depth_speed)
             self.mover.forward(self.config.gate_forward_time, self.config.gate_forward_speed)
 
-	def left_bound(self, left):
-		return left < self.sub_center
+    def left_bound(self, left):
+        return left < self.sub_center
 
-	def right_bound(self, right):
-		return right > self.sub_center
+    def right_bound(self, right):
+        return right > self.sub_center
 
-	def middle_bound(self, middle):
-		return (self.sub_center * 0.5) < middle < (self.sub_center * 1.5)
+    def middle_bound(self, middle):
+        return (self.sub_center * 0.5) < middle < (self.sub_center * 1.5)
 
     def motion_controller(self):
         msg = Twist()
@@ -69,16 +67,16 @@ class Gate(Task):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
             self.image = preprocess_image(cv_image)
-        	left = self.find_gate(cv_image, self.image, self.templ_left, (0,0,255))
-        	right = self.find_gate(cv_image, self.image, self.templ_right, (0,255,0))
-        	middle = self.find_gate(cv_image, self.image, self.templ_middle, (255, 0, 0))
+            left = self.find_gate(cv_image, self.image, self.templ_left, (0,0,255))
+            right = self.find_gate(cv_image, self.image, self.templ_right, (0,255,0))
+            middle = self.find_gate(cv_image, self.image, self.templ_middle, (255, 0, 0))
 
-			self.left = left.idx if(self.left_bound(left.idx)) else 0
-			self.right = right.idx if(self.right_bound(right.idx)) else 0
-			self.middle = middle.idx if(self.middle_bound(middle.idx)) else 0
+            self.left = left.idx if(self.left_bound(left.idx)) else 0
+            self.right = right.idx if(self.right_bound(right.idx)) else 0
+            self.middle = middle.idx if(self.middle_bound(middle.idx)) else 0
 
-			if(self.left or self.right or self.middle):
-				self.state = GateState.SomethingDetected
+            if(self.left or self.right or self.middle):
+                self.state = GateState.SomethingDetected
 
         except CvBridgeError as e:
             print(e)
