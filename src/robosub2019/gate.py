@@ -24,9 +24,9 @@ class Gate(Task):
         self.config = run_config
         self.camera_sub = rospy.Subscriber(self.config.camera_topic, Image, self.image_callback)
         self.bridge = CvBridge()
-        self.templ_left = preprocess_image(cv.imread(self.config.templates_folder + '/left_gate.jpg'))
-        self.templ_right = preprocess_image(cv.imread(self.config.templates_folder + '/right_gate.jpg'))
-        self.templ_middle = preprocess_image(cv.imread(self.config.templates_folder + '/middle_gate.jpg'))
+        # self.templ_left = preprocess_image(cv.imread(self.config.templates_folder + '/left_gate.jpg'))
+        # self.templ_right = preprocess_image(cv.imread(self.config.templates_folder + '/right_gate.jpg'))
+        # self.templ_middle = preprocess_image(cv.imread(self.config.templates_folder + '/middle_gate.jpg'))
         self.visualize = run_config.visualize
         self.sub_center = self.config.camera_dims_x/2
 

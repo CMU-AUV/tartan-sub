@@ -3,7 +3,6 @@ import rospy
 
 from motion_utilities import Mover
 from gate import Gate
-from vamp_visual_servo import VampVisualServoing
 from config import ConfigMap, SimConfig, SubConfig
 from armer import Armer
 from jerk import AccelGraph
@@ -18,7 +17,7 @@ class SubController(object):
 if __name__ == "__main__":
     rospy.init_node('tartan_19_controller', anonymous=True)
 
-    run_config = ConfigMap['Sim']
+    run_config = ConfigMap['Sub']
     sub_controller = SubController(run_config)
 
     gate = Gate(sub_controller, run_config)
@@ -28,6 +27,8 @@ if __name__ == "__main__":
 
     print("Gate")
     gate.execute()
+
+    sub_controller.armer.disarm()
 
     rospy.spin()
 
