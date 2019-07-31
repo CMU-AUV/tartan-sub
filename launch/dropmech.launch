@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node pkg="tartan_sub" name="dropmech" type="dropmech.py"  output="screen"/>
+        <param name="/rate" value="10" type="int" /> <!-- 10Hz node -->
+    </node>
+</launch>

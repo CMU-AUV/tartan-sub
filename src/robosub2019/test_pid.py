@@ -2,17 +2,13 @@
 import rospy
 
 from motion_utilities import Mover
-from gate import Gate
 from config import ConfigMap, SimConfig, SubConfig
-from armer import Armer
-from jerk import AccelGraph
 import time
 import numpy as np
 
 class SubController(object):
     def __init__(self, run_config):
         self.mover = Mover(run_config)
-        self.armer = Armer(run_config)
 
 
 if __name__ == "__main__":
@@ -20,8 +16,6 @@ if __name__ == "__main__":
 
     run_config = ConfigMap['Sim']
     sub_controller = SubController(run_config)
-
-    #     gate = Gate(sub_controller, run_config)
 
     time.sleep(5)
 
@@ -34,7 +28,7 @@ if __name__ == "__main__":
     print("PLEASE DON'T FLIP...")
 
     sub_controller.mover.target_heading(-np.pi + 0.2)
-    
+
     time.sleep(5)
 
     print(" TESTING RELATIVE 1")
