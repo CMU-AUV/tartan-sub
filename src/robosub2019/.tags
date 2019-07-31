@@ -1,0 +1,19 @@
+!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
+BarrelRoll	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/barrel_roll.py	/^class BarrelRoll(Task):$/;"	c	language:Python
+Done	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    Done = 3$/;"	v	language:Python	class:GateState
+execute	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/barrel_roll.py	/^    def execute(self):$/;"	m	language:Python	class:BarrelRoll
+execute	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def execute(self, type='naive'):$/;"	m	language:Python	class:Gate
+find_gate	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def find_gate(self, orig, src, template):$/;"	m	language:Python	class:Gate
+Gate	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^class Gate(Task):$/;"	c	language:Python
+GateState	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^class GateState(IntEnum):$/;"	c	language:Python
+image_callback	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def image_callback(self, data):$/;"	m	language:Python	class:Gate
+left_bound	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def left_bound(self, left):$/;"	m	language:Python	class:Gate
+middle_bound	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def middle_bound(self, middle):$/;"	m	language:Python	class:Gate
+motion_controller	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def motion_controller(self):$/;"	m	language:Python	class:Gate
+NothingDetected	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    NothingDetected = 1$/;"	v	language:Python	class:GateState
+right_bound	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def right_bound(self, right):$/;"	m	language:Python	class:Gate
+roll	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/barrel_roll.py	/^    def roll(self):$/;"	m	language:Python	class:BarrelRoll
+SomethingDetected	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    SomethingDetected = 2$/;"	v	language:Python	class:GateState
+__init__	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/barrel_roll.py	/^    def __init__(self, sub_controller):$/;"	m	language:Python	class:BarrelRoll
+__init__	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    def __init__(self, sub_controller, run_config):$/;"	m	language:Python	class:Gate
+__order__	/home/sagarwal/catkin_ws/src/tartan-sub/src/robosub2019/gate.py	/^    __order__ = "NothingDetected SomethingDetected Done"$/;"	v	language:Python	class:GateState

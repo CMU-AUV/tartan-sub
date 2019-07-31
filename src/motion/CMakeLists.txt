@@ -1,5 +1,6 @@
 library(motion_controller motion_controller.cpp)
 library(rcmavros rcmavros.cpp)
+library(pid pid.cpp)
 
 
 node(motion_controller_node motion_controller_node.cpp motion_controller rcmavros)
