@@ -109,7 +109,8 @@ class Mover(object):
     def target_pid(self, target_depth, target_heading, timeout_s=30):
         possible_exit = False
         abort_timestamp = time.time() + timeout_s
-        next_log_timestamp = time.time()
+        # next_log_timestamp = time.time()
+        r = rospy.Rate(self.hz)
         while not rospy.is_shutdown():
             if self.depth_calibrated:
                 self.depth_pid.setpoint = target_depth
@@ -151,7 +152,7 @@ class Mover(object):
                 possible_exit = True
             else:
                 possible_exit = False
-            time.sleep(1.0 / self.hz)
+            r.sleep()
         self._common_end_()
 
     def dive(self, duration, speed=-0.4):
