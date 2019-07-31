@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import cv2
+import time
 
 import roslib
 import rospy
@@ -26,6 +27,8 @@ class VampState(IntEnum):
 	SecondFollowing = 5
 	Done = 6
 
+JERK_DUR = 100.0 * (1.0/1000.0)
+JERK_THRESH = 0.2
 
 class VampVisualServoing(Task):
 	def __init__(self, sub_controller, run_config):
@@ -58,10 +61,24 @@ class VampVisualServoing(Task):
 
 		self.state = VampState.NothingDetected
 
+                self.neg_jerk = False
+                self.pos_jerk = False
+                self.jerk_deadline = 0
+                self.jerk_start = 0
+                self.hit = False
+
 	def jerk_callback(self, msg):
 		jerk = msg.data
-		# print("Jerk: " + str(jerk))
-		if jerk > 0.5 and self.state != VampState.FindSecond:
+                if jerk < -JERK_THRESH:
+                    self.jerk_deadline = time.time() + JERK_DUR
+                    self.jerk_start = time.time()
+                    print("NEG JERK HIT")
+                if jerk > JERK_THRESH:
+                    if self.jerk_deadline >= time.time():
+                        self.hit = True
+                        print("Jerk detected: strength {}, duration {}.".format(jerk, time.time() - self.jerk_start))
+		if self.hit and self.state != VampState.FindSecond:
+                        print("Jerk: " + str(jerk))
 			if self.state == VampState.FirstFollowing:
 				self.mover.forward(20.0, -self.linear_speed_x)
 				self.state = VampState.GotoSecond
@@ -125,6 +142,7 @@ class VampVisualServoing(Task):
 			if self.state == VampState.NothingDetected:
 				# print('Moving forward')
 				self.mover.forward(0.01, self.linear_speed_x)
+                                self.hit = False
 			elif self.state == VampState.FirstFollowing:
 				# print('Hitting Vamp')
 				self.target_follower(self.target_center_x, self.target_center_y)

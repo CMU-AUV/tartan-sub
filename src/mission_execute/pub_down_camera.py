@@ -42,7 +42,7 @@ while(True):
 
     print("Got Image ", frameId)
 
-    if frameId % 10 == -1:
+    if frameId % 10 == 1:
         cv2.imshow('down', downFrame)
 
     down_image_pub.publish(BRIDGE.cv2_to_imgmsg(downFrame, "bgr8"))

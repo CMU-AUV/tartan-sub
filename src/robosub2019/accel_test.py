@@ -3,7 +3,6 @@ import rospy
 
 from motion_utilities import Mover
 from gate import Gate
-from vamp_visual_servo import VampVisualServoing
 from config import ConfigMap, SimConfig, SubConfig
 from armer import Armer
 from jerk import AccelGraph
@@ -21,22 +20,18 @@ if __name__ == "__main__":
     run_config = ConfigMap['Sub']
     sub_controller = SubController(run_config)
 
-    gate = Gate(sub_controller, run_config)
-    vamp = VampVisualServoing(sub_controller, run_config)
     jerk = AccelGraph(run_config)
 
     print("Arming")
-    sub_controller.armer.arm()
-
-    sub_controller.mover.dive(4.0, -0.4)
+    # sub_controller.armer.arm()
 
     print("Gate")
     # gate.execute()
 
-    print("Vamp")
-    vamp.execute()
-    
-    sub_controller.armer.disarm()
+    while not rospy.is_shutdown():
+        rospy.sleep(0.5)
+
+    # sub_controller.armer.disarm()
 
     rospy.spin()
 

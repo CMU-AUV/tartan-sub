@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="rqt_plot" name="jerk" type="rqt_plot" args="/rexrov/jerk"/>
+
+
+</launch>

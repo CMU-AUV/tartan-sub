@@ -14,13 +14,13 @@ class Mover(object):
     def _common_end_(self):
         if(rospy.is_shutdown()):
             return
-        print("Ending")
+        # print("Ending")
         # Stop the sub once complete
         self.pub.publish(Twist())
 
     def _send_message_duration_(self, msg, duration):
         end_time = duration + time.time()
-        print(msg)
+        # print(msg)
         while time.time() < end_time and not rospy.is_shutdown():
             self.pub.publish(msg)
             # time.sleep(1.0/self.hz)

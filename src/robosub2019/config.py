@@ -34,7 +34,7 @@ class SubConfig(object):
 
     visual_servo_kp_yaw = -0.001
     visual_servo_kp_alt = -0.001
-    target_seq = ['jia', 'Vet']
+    target_seq = ['jia', 'asw']
 
 class SimConfig(object):
     # Topics
