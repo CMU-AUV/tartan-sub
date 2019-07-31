@@ -78,11 +78,22 @@ class Mover(object):
     def _send_message(self, msg):
         self.pub.publish(msg)
 
-    def target_pid_heading(self, target_heading):
+    def target_heading(self, target_heading):
         self.target_pid(self.curr_depth - self.initial_depth, target_heading)
 
-    def target_pid_depth(self, target_depth):
+    def target_heading_relative(self, target_heading):
+        if target_heading - self.curr_yaw > np.pi:
+            target_heading -= 2*np.pi
+
+        if target_heading - self.curr_yaw < -np.pi:
+            target_heading += 2*np.pi
+        self.target_pid(self.curr_depth - self.initial_depth, self.curr_yaw + target_heading)
+
+    def target_depth(self, target_depth):
         self.target_pid(target_depth, self.curr_yaw)
+
+    def target_depth_relative(self, target_depth):
+        self.target_pid((self.curr_depth - self.initial_depth) + target_depth, self.curr_yaw)
 
     def target_pid(self, target_depth, target_heading):
         depth_control = 100.0
