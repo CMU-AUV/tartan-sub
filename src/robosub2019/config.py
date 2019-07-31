@@ -13,7 +13,7 @@ class SubConfig(object):
     left_camera_topic = "/sj_camera/left_image_raw"
     right_camera_topic = "/sj_camera/right_image_raw"
     imu_topic = "/mavros/imu/data"
-    depth_topic = "/mavros/imu/atm_pressure"
+    depth_topic = "/mavros/imu/diff_pressure"
 
     visualize = False
 
@@ -80,7 +80,6 @@ class SimConfig(object):
     area_ratio = 0.3
     duration = 3.0
 
-    imu_topic = '/rexrov/imu'
     jerk_topic = '/rexrov/jerk'
 
     visual_servo_kp_alt = -0.0010

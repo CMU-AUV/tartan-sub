@@ -28,8 +28,8 @@ class Mover(object):
     hz = 10
 
     def __init__(self, run_config):
-        self.heading_pid = PID(1, 0.1, 0.1, setpoint=0)
-        self.depth_pid = PID(1, 0.1, 0.1, setpoint=0)
+        self.heading_pid = PID(0.4, 0, 0, setpoint=0)
+        self.depth_pid = PID(0.2, 0, 0, setpoint=0)
 
         self.config = run_config
         self.pub = rospy.Publisher(self.config.mover_topic, Twist, queue_size=2)
@@ -50,21 +50,26 @@ class Mover(object):
         self.depth_calibrated = False
         self.depth_calibration_val = None
 
+
     def imu_callback(self, msg):
         q = msg.orientation
         new_q = [q.x, q.y, q.z, q.w]
         euler = tf.transformations.euler_from_quaternion(new_q)
+        # print("Euler: {}".format(euler))
         self.curr_yaw = euler[2]
 
     def depth_callback(self, msg):
-        # pascal_pressure = msg.fluid_pressure
-        atm_pressure = msg.fluid_pressure
-        # atm_pressure = pascal_pressure/PASCAL_TO_ATM
+        pascal_pressure = msg.fluid_pressure
+        # atm_pressure = msg.fluid_pressure
+        atm_pressure = 1000*pascal_pressure/PASCAL_TO_ATM
         meters_depth = atm_pressure / ATM_TO_METERS
+        meters_depth = atm_pressure
+        #print("Pascal {}, ATM: {}, M {}".format(pascal_pressure, atm_pressure, meters_depth))
         if not self.depth_calibrated:
             self.depth_calibration_val = meters_depth
             self.depth_calibrated = True
-        self.curr_depth = meters_depth + self.depth_calibration_val
+        self.curr_depth = meters_depth - self.depth_calibration_val
+        #print("Depth raw: {}, Depth adj: {}, (offset: {})".format(meters_depth, self.curr_depth, self.depth_calibration_val))
 
     def _common_end_(self):
         if rospy.is_shutdown():
@@ -125,9 +130,7 @@ class Mover(object):
 
             heading_control = self.heading_pid(self.curr_yaw)
 
-            if(time.time() >= next_log_timestamp)
-                print("heading: {} -> {} ({}); depth: {} -> {} ({})".format(self.curr_yaw, target_heading, heading_control, self.curr_depth, self.depth_pid.setpoint, depth_control))
-                next_log_timestamp += 1
+            print("heading: {} -> {} ({}); depth: {} -> {} ({})".format(self.curr_yaw, target_heading, heading_control, self.curr_depth, self.depth_pid.setpoint, depth_control))
 
             msg = Twist()
             msg.linear.z = depth_control
@@ -143,6 +146,7 @@ class Mover(object):
                     and abs(target_depth - self.curr_depth) < THRESHOLD_DEPTH_P \
                     and abs(target_heading - self.curr_yaw) < THRESHOLD_HEADING_P:
                 if possible_exit:
+                    print("Control Move Complete !! ")
                     break
                 possible_exit = True
             else:
