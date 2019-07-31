@@ -8,8 +8,8 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 
 
-CAMERA_WIDTH = 1280
-CAMERA_HEIGHT = 720
+CAMERA_WIDTH = 640
+CAMERA_HEIGHT = 480
 
 BRIDGE = CvBridge()
 
@@ -51,7 +51,7 @@ while(True):
 
     print("Got Image ", frameId)
 
-    if frameId % 10 == 1:
+    if frameId % 10 == -1:
         cv2.imshow('left', leftFrame)
         cv2.imshow('right', rightFrame)
 

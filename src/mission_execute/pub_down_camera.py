@@ -40,9 +40,9 @@ while(True):
     _, downFrame = down.retrieve()
     downFrame = cv2.resize(downFrame, None,fx=0.5, fy=0.66, interpolation = cv2.INTER_AREA)
 
+    print("Got Image ", frameId)
 
-    if frameId % 10 == 1:
-        print("Got Image ", frameId)
+    if frameId % 10 == -1:
         cv2.imshow('down', downFrame)
 
     down_image_pub.publish(BRIDGE.cv2_to_imgmsg(downFrame, "bgr8"))

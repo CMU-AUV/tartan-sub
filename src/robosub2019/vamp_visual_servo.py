@@ -61,7 +61,7 @@ class VampVisualServoing(Task):
 	def jerk_callback(self, msg):
 		jerk = msg.data
 		# print("Jerk: " + str(jerk))
-		if jerk > 1.5 and self.state != VampState.FindSecond:
+		if jerk > 0.5 and self.state != VampState.FindSecond:
 			if self.state == VampState.FirstFollowing:
 				self.mover.forward(20.0, -self.linear_speed_x)
 				self.state = VampState.GotoSecond
@@ -116,9 +116,9 @@ class VampVisualServoing(Task):
 		self.mover.publish(msg)
 
 	def execute(self):
-		while(not rospy.is_shutdown() and self.state == VampState.Done ):
+		while(not rospy.is_shutdown() and self.state != VampState.Done ):
 			self.update_idx += 1
-			if (self.update_idx%100 != 0):
+			if (self.update_idx % 10 != 0):
 				continue
 			print("Current State: " + str(self.state) + " idx " + str(self.update_idx))
 

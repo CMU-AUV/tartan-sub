@@ -18,19 +18,19 @@ class SubConfig(object):
 
     # Gate
     gate_depth_speed = -0.4
-    gate_depth_time = 7
-    gate_forward_speed = 0.2
-    gate_forward_time = 27.0
+    gate_depth_time = 2
+    gate_forward_speed = 0.3
+    gate_forward_time = 40.0
     templates_folder = 'templates_sub'
-    gate_time = 30.0
+    gate_time = 50.0
 
     # PathMarker
 
     # Vamp Visual Servo
-    visual_servo_forward_speed = 0.2
+    visual_servo_forward_speed = 0.4
 
-    imu_topic = "/mavros/imu"
-    jerk_topic = "mavros/jerk"
+    imu_topic = "/mavros/imu/data"
+    jerk_topic = "/mavros/jerk"
 
     visual_servo_kp_yaw = -0.001
     visual_servo_kp_alt = -0.001

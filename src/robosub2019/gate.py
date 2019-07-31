@@ -67,16 +67,16 @@ class Gate(Task):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
             self.image = preprocess_image(cv_image)
-            left = self.find_gate(cv_image, self.image, self.templ_left, (0,0,255))
-            right = self.find_gate(cv_image, self.image, self.templ_right, (0,255,0))
-            middle = self.find_gate(cv_image, self.image, self.templ_middle, (255, 0, 0))
+            # left = self.find_gate(cv_image, self.image, self.templ_left, (0,0,255))
+            # right = self.find_gate(cv_image, self.image, self.templ_right, (0,255,0))
+            # middle = self.find_gate(cv_image, self.image, self.templ_middle, (255, 0, 0))
 
-            self.left = left.idx if(self.left_bound(left.idx)) else 0
-            self.right = right.idx if(self.right_bound(right.idx)) else 0
-            self.middle = middle.idx if(self.middle_bound(middle.idx)) else 0
+            # self.left = left.idx if(self.left_bound(left.idx)) else 0
+            # self.right = right.idx if(self.right_bound(right.idx)) else 0
+            # self.middle = middle.idx if(self.middle_bound(middle.idx)) else 0
 
-            if(self.left or self.right or self.middle):
-                self.state = GateState.SomethingDetected
+            # if(self.left or self.right or self.middle):
+            #     self.state = GateState.SomethingDetected
 
         except CvBridgeError as e:
             print(e)
