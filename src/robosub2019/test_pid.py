@@ -27,14 +27,24 @@ def main():
     #    rospy.spin()
 
     time.sleep(4)
-    sub_controller.mover.target_depth(0.75)
+    sub_controller.mover.target_depth(1, timeout_s = 4)
     time.sleep(4)
-    sub_controller.mover.target_heading(0.0)
+    sub_controller.mover.target_depth(2, timeout_s = 4)
     time.sleep(4)
-    sub_controller.mover.target_heading(np.pi)
+    sub_controller.mover.target_depth(0.5, timeout_s = 4)
+    time.sleep(4)
+    sub_controller.mover.target_depth(1, timeout_s = 4)
+    time.sleep(4)
+
+    sub_controller.mover.target_heading(0.0, timeout_s=10)
+    sub_controller.mover.target_heading(np.pi, timeout_s=20)
+    sub_controller.mover.target_heading(3.0/2.0*np.pi, timeout_s=10)
+    time.sleep(4)
+    sub_controller.mover.target_depth(0, timeout_s=3)
+    sub_controller.armer.disarm()
+    exit()
 
     print("starting depth tests...")
-
     time.sleep(4)
     sub_controller.mover.target_depth(0.5)
     time.sleep(4)

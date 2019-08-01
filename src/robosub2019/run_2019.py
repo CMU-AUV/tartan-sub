@@ -22,17 +22,20 @@ if __name__ == "__main__":
 
     gate = Gate(sub_controller, run_config)
     vamp = VampVisualServoing(sub_controller, run_config)
+    #vamp = VampVisualServoing(sub_controller, run_config)
+    #jerk = AccelGraph(run_config)
 
     print("Arming")
     sub_controller.armer.arm()
 
-    sub_controller.mover.dive(2.0, -0.4)
+    # sub_controller.mover.dive(4.0, -0.4)
 
     print("Gate")
-    # gate.execute()
+    gate.execute("fancy")
 
     print("Vamp")
     vamp.execute()
+    sub_controller.armer.disarm()
 
     sub_controller.armer.disarm()
 

@@ -14,13 +14,13 @@ PASCAL_TO_ATM = 101325.0
 ATM_TO_METERS = 10.33492
 
 THRESHOLD_DEPTH_V = 0.1
-THRESHOLD_HEADING_V = 0.02
+THRESHOLD_HEADING_V = 0.5
 THRESHOLD_DEPTH_P = 0.02
-THRESHOLD_HEADING_P = 2.0*np.pi/360.0*2.5
+THRESHOLD_HEADING_P = 0.05
 
 TIME = 0.5
 
-YAW_SPEED_LIMIT = 0.3
+YAW_SPEED_LIMIT = 0.2
 DEPTH_SPEED_LIMIT_UP = 0.1
 DEPTH_SPEED_LIMIT_DOWN = 0.25
 
@@ -29,8 +29,8 @@ class Mover(object):
     hz = 10
 
     def __init__(self, run_config):
-        self.heading_pid = PID(0.1, 0, 0.05, setpoint=0)
-        self.depth_pid = PID(1.5, 0.02, 0.7, setpoint=0)
+        self.heading_pid = PID(1.2, 0.4, 0.15, setpoint=0)
+        self.depth_pid = PID(0.4, 0, 0.1, setpoint=0)
 
         self.config = run_config
         self.pub = rospy.Publisher(self.config.mover_topic, Twist, queue_size=2)
@@ -41,7 +41,7 @@ class Mover(object):
         # self.target_heading = rospy.Subscriber('/target_heading', Float64, self.target_heading_callback)
         # self.target_depth = rospy.Subscriber('/target_depth', Float64, self.target_depth_callback)
 
-        self.hz = 25
+        self.hz = 5
         self.curr_yaw = 0.0
         self.curr_depth = 0.0
 
@@ -84,7 +84,6 @@ class Mover(object):
         # print(msg)
         while time.time() < end_time and not rospy.is_shutdown():
             self.pub.publish(msg)
-            # time.sleep(1.0/self.hz)
         self._common_end_()
 
     def _send_message(self, msg):
@@ -113,6 +112,7 @@ class Mover(object):
         abort_timestamp = time.time() + timeout_s
         # next_log_timestamp = time.time()
         r = rospy.Rate(self.hz)
+        d_cnt = 0
         while not rospy.is_shutdown():
             if self.depth_calibrated:
                 self.depth_pid.setpoint = target_depth
@@ -126,7 +126,9 @@ class Mover(object):
             self.heading_pid.setpoint = target_heading
 
             # flip since positive z is up, but positive depth is down :/
+            #if d_cnt % 5 == 0:
             depth_control = -self.depth_pid(self.curr_depth)
+            #    d_cnt += 1
 
             if not self.depth_calibrated or lock_depth:
                 depth_control = 0.0
@@ -136,11 +138,11 @@ class Mover(object):
             if lock_heading:
                 heading_control = 0
 
-            print("heading: {} -> {} ({}); depth: {} -> {} ({})".format(self.curr_yaw, target_heading, heading_control, self.curr_depth, self.depth_pid.setpoint, depth_control))
+            print("heading: {} -> {} ({}); depth: {} -> {} ({})".format(self.curr_yaw, self.heading_pid.setpoint, heading_control, self.curr_depth, self.depth_pid.setpoint, depth_control))
 
             msg = Twist()
             msg.linear.z = depth_control
-            msg.angular.z = heading_control
+            msg.angular.z = -heading_control
             self._send_message(msg)
 
             if time.time() >= abort_timestamp:
@@ -159,6 +161,12 @@ class Mover(object):
                 possible_exit = False
             r.sleep()
         self._common_end_()
+
+    def get_heading(self):
+        return self.curr_yaw
+
+    def get_depth(self):
+        return self.curr_depth
 
     def dive(self, duration, speed=-0.4):
         msg = Twist()
