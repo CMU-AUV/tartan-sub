@@ -63,7 +63,7 @@ MavrosRCController::MavrosRCController() {
   StreamRate stream_rate_cmd;
   stream_rate_cmd.request.stream_id =
       mavros_msgs::StreamRateRequest::STREAM_ALL;
-  stream_rate_cmd.request.message_rate = 100;
+  stream_rate_cmd.request.message_rate = 20;
   stream_rate_cmd.request.on_off = true;
 
   if (!stream_rate_client_.call(stream_rate_cmd)) {

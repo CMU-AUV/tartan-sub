@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     print("Vamp")
     vamp.execute()
-    
+
     sub_controller.armer.disarm()
 
 if __name__ == '__main__':
