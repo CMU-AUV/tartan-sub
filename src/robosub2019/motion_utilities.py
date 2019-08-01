@@ -183,6 +183,11 @@ class Mover(object):
         msg.angular.z = speed
         self._send_message_duration_(msg, duration)
 
+    def strafe(self, duration, speed):
+        msg = Twist()
+        msg.linear.y = speed
+        self._send_message_duration_(msg, duration)
+
     def publish(self, msg):
         # print(msg)
         self.pub.publish(msg)
