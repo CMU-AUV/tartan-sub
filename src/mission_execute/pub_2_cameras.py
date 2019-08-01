@@ -51,7 +51,7 @@ while(True):
 
     print("Got Image ", frameId)
 
-    if frameId % 10 == 1:
+    if frameId % 5 == -1:
         cv2.imshow('left', leftFrame)
         cv2.imshow('right', rightFrame)
 
