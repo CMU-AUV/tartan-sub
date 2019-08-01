@@ -3,6 +3,9 @@
 
 class SubConfig(object):
     # Topics
+    
+    sim_type = 'Sub'
+
     mover_topic = "/cmd_vel"
     arming_topic = "/arming"
     darknet_topic = "/darknet_ros/bounding_boxes"
@@ -13,8 +16,8 @@ class SubConfig(object):
     visualize = False
 
     # Camara Params
-    camera_dims_x = 640
-    camera_dims_y = 480
+    camera_dims_x = 640.0
+    camera_dims_y = 480.0
 
     # Gate
     gate_depth_speed = -0.4
@@ -27,7 +30,10 @@ class SubConfig(object):
     # PathMarker
 
     # Vamp Visual Servo
-    visual_servo_forward_speed = 0.4
+    visual_servo_forward_speed = 0.3
+
+    area_ratio = 0.3
+    duration = 3.0
 
     imu_topic = "/mavros/imu/data"
     jerk_topic = "/mavros/jerk"
@@ -38,6 +44,8 @@ class SubConfig(object):
 
 class SimConfig(object):
     # Topics
+    sim_type = 'Sim'
+
     mover_topic = "/rexrov/cmd_vel"
     arming_topic = "/rexrov/arming"
     darknet_topic = "/darknet_ros/bounding_boxes"
@@ -64,6 +72,9 @@ class SimConfig(object):
 
     # Vamp Visual Servo
     visual_servo_forward_speed = 0.2
+
+    area_ratio = 0.3
+    duration = 3.0
 
     imu_topic = '/rexrov/imu'
     jerk_topic = '/rexrov/jerk'

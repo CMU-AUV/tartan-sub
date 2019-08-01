@@ -25,7 +25,7 @@
       <arg name="model_name" value="rexrov"/>
   </include>
 
-  <node pkg="rqt_plot" name="jerk" type="rqt_plot" args="/rexrov/jerk"/>
+    <!-- <node pkg="rqt_plot" name="jerk" type="rqt_plot" args="/rexrov/jerk"/> -->
 
 
 </launch>

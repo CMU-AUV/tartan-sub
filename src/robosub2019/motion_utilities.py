@@ -42,5 +42,5 @@ class Mover(object):
         self._send_message_duration_(msg, duration)
 
     def publish(self, msg):
-        print(msg)
+        # print(msg)
         self.pub.publish(msg)
