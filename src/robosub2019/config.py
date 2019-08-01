@@ -32,7 +32,7 @@ class SubConfig(object):
     # PathMarker
 
     # Vamp Visual Servo
-    visual_servo_forward_speed = 0.1
+    visual_servo_forward_speed = 0.2
 
     area_ratio = 0.3
     duration = 3.0
@@ -42,7 +42,7 @@ class SubConfig(object):
 
     visual_servo_kp_yaw = -0.001
     visual_servo_kp_alt = -0.001
-    target_seq = ['jia', 'asw']
+    target_seq = ['jia', 'asw', 'dra', 'Vet']
 
 class SimConfig(object):
     # Topics

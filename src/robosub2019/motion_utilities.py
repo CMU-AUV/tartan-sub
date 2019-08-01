@@ -16,7 +16,7 @@ ATM_TO_METERS = 10.33492
 THRESHOLD_DEPTH_V = 0.1
 THRESHOLD_HEADING_V = 0.5
 THRESHOLD_DEPTH_P = 0.02
-THRESHOLD_HEADING_P = 0.05
+THRESHOLD_HEADING_P = 0.1
 
 TIME = 0.5
 
@@ -75,7 +75,7 @@ class Mover(object):
     def _common_end_(self):
         if rospy.is_shutdown():
             return
-        print("Move complete: holding pos!")
+        # print("Move complete: holding pos!")
         # Stop the sub once complete
         self.pub.publish(Twist())
 

@@ -28,10 +28,10 @@ if __name__ == "__main__":
     print("Arming")
     sub_controller.armer.arm()
 
-    # sub_controller.mover.dive(4.0, -0.4)
-
     print("Gate")
-    gate.execute("fancy")
+    # gate.execute("fancy")
+
+    sub_controller.mover.dive(1, -0.4)
 
     print("Vamp")
     vamp.execute()

@@ -11,12 +11,18 @@ from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge, CvBridgeError
 from vision_utilities import bbox, val_idx, bins, preprocess_image
+import numpy as np
 
-GATE_DEPTH = 1
-DICE_ROLL_DURATION = 10
-GATE_FORWARDS_TIME = 7
-GATE_SPIN_TIME = 6
+GATE_DEPTH = 2
+DICE_ROLL_DURATION = 5
+GATE_FORWARDS_TIME = 30
+GATE_SPIN_TIME = 5
 GATE_FORWARDS_TIME_POST_FANCY = 5
+GATE_DEPTH_S = 1
+DICE_ROLL_DURATION = 5
+GATE_FORWARDS_TIME = 3
+GATE_SPIN_TIME = 5
+GATE_FORWARDS_TIME_POST_FANCY = 3
 
 class GateState(IntEnum):
     __order__ = "NothingDetected SomethingDetected Done"
@@ -29,6 +35,7 @@ class GateState(IntEnum):
     Fancy = 7
     Away = 8
     Waiting = 9
+    Diving = 10
 
 
 
@@ -60,20 +67,36 @@ class Gate(Task):
                 self.middle = 0
         elif type == 'fancy':
             self.state = GateState.Init
+            heading_target = 0
             while not rospy.is_shutdown() and self.state is not GateState.Done:
                 if self.state == GateState.Init:
-                    self.gatedir = self.mover.get_heading()
-                    self.state = GateState.Waiting
-                    print("Gate direction saved: {}. Waiting {} for coin toss!".format(self.mover.get_heading(), DICE_ROLL_DURATION))
-                    self.waitDeadline = time.time() + DICE_ROLL_DURATION
+                    heading_target = self.mover.get_heading()
+                    self.state = GateState.Orienting
                 if self.state == GateState.Waiting:
+                    print("time remaining: {}".format(self.waitDeadline - time.time()))
                     if time.time() >= self.waitDeadline:
-                        self.state = GateState.Orienting
+                        self.state = GateState.Diving
                 if self.state == GateState.Orienting:
+                    print("Orienting vehicle. Get ready for user prompts!")
+                    txt = raw_input("[l]eft, [r]ight, or [d]one? ")
+                    if txt == "l":
+                        self.mover.turn(0.25,-0.2)
+                    if txt == "L":
+                        self.mover.turn(0.5,-0.3)
+                    elif txt == "r":
+                        self.mover.turn(0.25,0.2)
+                    if txt == "R":
+                        self.mover.turn(0.5,0.3)
+                    elif txt == "d":
+                        print("Final orientation set to {}! Disconnect now! you've got {} seconds...!".format(heading_target, DICE_ROLL_DURATION))
+                        self.waitDeadline = time.time() + DICE_ROLL_DURATION
+                        self.state = GateState.Waiting
+                    else:
+                        print("bad input!")
+                if self.state == GateState.Diving:
                     print("Descending vehicle:")
-                    self.mover.target_depth(GATE_DEPTH, timeout_s=2)
-                    print("Orienting vehicle:")
-                    self.mover.target_heading(self.gatedir, timeout_s=10)
+                    #self.mover.target_depth(GATE_DEPTH, timeout_s=2)
+                    self.mover.dive(GATE_DEPTH_S, -0.3)
                     self.state = GateState.Towards
                 if self.state == GateState.Towards:
                     print("Approaching gate:")
@@ -81,13 +104,14 @@ class Gate(Task):
                     self.state = GateState.Fancy
                 if self.state == GateState.Fancy:
                     print("Fancy time!")
+                    heading_target = self.mover.get_heading()
                     self.mover.turn(GATE_SPIN_TIME, 1)
-                    self.mover.target_heading(0, timeout_s=5)
+                    self.mover.target_heading(heading_target, timeout_s=10)
                     self.state = GateState.Away
                 if self.state == GateState.Away:
                     print("leaving gate...")
                     self.mover.forward(GATE_FORWARDS_TIME_POST_FANCY, 0.3)
-                    self.state = GateState.Done
+                    return
         else:
             self.mover.dive(self.config.gate_depth_time, self.config.gate_depth_speed)
             self.mover.forward(self.config.gate_forward_time, self.config.gate_forward_speed)
