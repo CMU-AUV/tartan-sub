@@ -13,23 +13,24 @@ import tf
 PASCAL_TO_ATM = 101325.0
 ATM_TO_METERS = 10.33492
 
-THRESHOLD_DEPTH_V = 0.02
-THRESHOLD_HEADING_V = 0.04
+THRESHOLD_DEPTH_V = 0.1
+THRESHOLD_HEADING_V = 0.02
 THRESHOLD_DEPTH_P = 0.02
 THRESHOLD_HEADING_P = 2.0*np.pi/360.0*2.5
 
 TIME = 0.5
 
-YAW_SPEED_LIMIT = 0.5
-DEPTH_SPEED_LIMIT = 0.5
+YAW_SPEED_LIMIT = 0.3
+DEPTH_SPEED_LIMIT_UP = 0.1
+DEPTH_SPEED_LIMIT_DOWN = 0.25
 
 
 class Mover(object):
     hz = 10
 
     def __init__(self, run_config):
-        self.heading_pid = PID(0.4, 0, 0, setpoint=0)
-        self.depth_pid = PID(0.2, 0, 0, setpoint=0)
+        self.heading_pid = PID(0.1, 0, 0.05, setpoint=0)
+        self.depth_pid = PID(1.5, 0.02, 0.7, setpoint=0)
 
         self.config = run_config
         self.pub = rospy.Publisher(self.config.mover_topic, Twist, queue_size=2)
@@ -45,7 +46,7 @@ class Mover(object):
         self.curr_depth = 0.0
 
         self.heading_pid.output_limits = (-YAW_SPEED_LIMIT, YAW_SPEED_LIMIT)
-        self.depth_pid.output_limits = (-DEPTH_SPEED_LIMIT, DEPTH_SPEED_LIMIT)
+        self.depth_pid.output_limits = (-DEPTH_SPEED_LIMIT_UP, DEPTH_SPEED_LIMIT_DOWN)
 
         self.depth_calibrated = False
         self.depth_calibration_val = None
@@ -69,7 +70,7 @@ class Mover(object):
             self.depth_calibration_val = meters_depth
             self.depth_calibrated = True
         self.curr_depth = meters_depth - self.depth_calibration_val
-        #print("Depth raw: {}, Depth adj: {}, (offset: {})".format(meters_depth, self.curr_depth, self.depth_calibration_val))
+        # print("Depth raw: {}, Depth adj: {}, (offset: {})".format(meters_depth, self.curr_depth, self.depth_calibration_val))
 
     def _common_end_(self):
         if rospy.is_shutdown():
@@ -90,7 +91,7 @@ class Mover(object):
         self.pub.publish(msg)
 
     def target_heading(self, target_heading, timeout_s=30):
-        self.target_pid(self.curr_depth, target_heading, timeout_s)
+        self.target_pid(self.curr_depth, target_heading, timeout_s, lock_depth=True)
 
     def target_heading_relative(self, target_heading, timeout_s=30):
         if target_heading - self.curr_yaw > np.pi:
@@ -100,13 +101,14 @@ class Mover(object):
             target_heading += 2 * np.pi
         self.target_pid(self.curr_depth, self.curr_yaw + target_heading)
 
-    def target_depth(self, target_depth, timeout_s=30):
-        self.target_pid(target_depth, self.curr_yaw, timeout_s)
+    def target_depth(self, target_depth, timeout_s=7):
+        self.target_pid(target_depth, self.curr_yaw, timeout_s, lock_heading=True)
 
-    def target_depth_relative(self, target_depth, timeout_s=30):
+    def target_depth_relative(self, target_depth, timeout_s=7):
         self.target_pid(self.curr_depth + target_depth, self.curr_yaw, timeout_s)
 
-    def target_pid(self, target_depth, target_heading, timeout_s=30):
+    def target_pid(self, target_depth, target_heading, timeout_s=7, lock_depth=False, lock_heading=False):
+        print("curr depth: {}, cal: {}".format(self.curr_depth, self.depth_calibration_val))
         possible_exit = False
         abort_timestamp = time.time() + timeout_s
         # next_log_timestamp = time.time()
@@ -126,10 +128,13 @@ class Mover(object):
             # flip since positive z is up, but positive depth is down :/
             depth_control = -self.depth_pid(self.curr_depth)
 
-            if not self.depth_calibrated:
+            if not self.depth_calibrated or lock_depth:
                 depth_control = 0.0
 
             heading_control = self.heading_pid(self.curr_yaw)
+
+            if lock_heading:
+                heading_control = 0
 
             print("heading: {} -> {} ({}); depth: {} -> {} ({})".format(self.curr_yaw, target_heading, heading_control, self.curr_depth, self.depth_pid.setpoint, depth_control))
 
@@ -142,7 +147,7 @@ class Mover(object):
                 print("Timed out waiting {}s to hit targets".format(timeout_s))
                 break
 
-            if abs(depth_control) < THRESHOLD_DEPTH_V \
+            if abs(depth_control + 0.1) < THRESHOLD_DEPTH_V \
                     and abs(heading_control) < THRESHOLD_HEADING_V \
                     and abs(target_depth - self.curr_depth) < THRESHOLD_DEPTH_P \
                     and abs(target_heading - self.curr_yaw) < THRESHOLD_HEADING_P:

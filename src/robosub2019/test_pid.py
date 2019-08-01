@@ -25,22 +25,41 @@ def main():
     #while not rospy.is_shutdown():
     #    rospy.sleep(0.1)
     #    rospy.spin()
-    
-    time.sleep(1)
 
+    time.sleep(4)
+    sub_controller.mover.target_depth(0.75)
+    time.sleep(4)
+    sub_controller.mover.target_heading(0.0)
+    time.sleep(4)
+    sub_controller.mover.target_heading(np.pi)
+
+    print("starting depth tests...")
+
+    time.sleep(4)
     sub_controller.mover.target_depth(0.5)
+    time.sleep(4)
+    sub_controller.mover.target_depth(0.25)
+    time.sleep(4)
+    sub_controller.mover.target_depth(0.75)
+    time.sleep(4)
+    sub_controller.mover.target_depth(0.25)
+    time.sleep(4)
+    sub_controller.mover.target_depth(1)
+    time.sleep(4)
+    sub_controller.mover.target_depth(0.5)
+    time.sleep(4)
 
     print("deeeeep")
 
-    sub_controller.mover.target_heading(0.0)
+#    sub_controller.mover.target_heading(0.0)
 
     print("************************** HAHAH *************************\n")
 
-    sub_controller.mover.target_heading(np.pi - 0.2)
+#    sub_controller.mover.target_heading(np.pi - 0.2)
 
     print("PLEASE DON'T FLIP...")
 
-    sub_controller.mover.target_heading(-np.pi + 0.2)
+#    sub_controller.mover.target_heading(-np.pi + 0.2)
 
     # time.sleep(5)
 
@@ -60,11 +79,15 @@ def main():
 
     # sub_controller.mover.target_depth_relative(10)
 
+    print("Done, sleeping for 30s...")
+    time.sleep(30)
+    print("now disarming.")
+
     sub_controller.armer.disarm()
-    
+
     rospy.spin()
 
-    return 
+    return
 
 
 if __name__ == '__main__':
