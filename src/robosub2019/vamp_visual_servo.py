@@ -97,7 +97,7 @@ class VampVisualServoing(Task):
 
 			self.ratio = float(bbox_area)/float(self.area)
 
-			# print("Image Area: {}, BBox area: {}, Ratio: {}".format(self.area, bbox_area, self.ratio))
+			print("Image Area: {}, BBox area: {}, Ratio: {}".format(self.area, bbox_area, self.ratio))
 
 			self.target_center_x = (x_max + x_min)/2
 			self.target_center_y = (y_max + y_min)/2
@@ -176,14 +176,14 @@ class VampVisualServoing(Task):
 					end_time = self.config.duration + time.time()
 					while time.time() < end_time and not rospy.is_shutdown():
 						self.target_follower(self.target_center_x, self.target_center_y, 0.1)
-					self.mover.forward(15.0, -2*self.linear_speed_x)
+					self.mover.forward(7.0, -2*self.linear_speed_x)
 					self.state = VampState.GotoSecond
 			elif self.state == VampState.GotoSecond:
-				self.mover.dive(7.0, 2*self.linear_speed_x)
+				self.mover.dive(3.0, 2*self.linear_speed_x)
 				self.mover.turn(2.0, -self.linear_speed_x)
-				self.mover.forward(40.0, 2*self.linear_speed_x)
-				self.mover.turn(12.0, -self.linear_speed_x)
-				self.mover.dive(7.0, -2*self.linear_speed_x)
+				self.mover.forward(15.0, 2*self.linear_speed_x)
+				self.mover.turn(2.0, -self.linear_speed_x)
+				self.mover.dive(3.0, -2*self.linear_speed_x)
 				self.state = VampState.FindSecond
 			elif self.state == VampState.FindSecond:
 				self.mover.forward(0.01, self.linear_speed_x)
@@ -193,7 +193,7 @@ class VampVisualServoing(Task):
 					end_time = self.config.duration + time.time()
 					while time.time() < end_time and not rospy.is_shutdown():
 						self.target_follower(self.target_center_x, self.target_center_y, 0.1)
-					self.mover.forward(15.0, -2*self.linear_speed_x)
+					self.mover.forward(7.0, -2*self.linear_speed_x)
 					self.state = VampState.Done
 			self.prev_state = self.state
 			self.curr_time = time.time() - self.start_time
