@@ -3,7 +3,7 @@
 
 class SubConfig(object):
     # Topics
-    
+
     sim_type = 'Sub'
 
     mover_topic = "/cmd_vel"
@@ -30,7 +30,7 @@ class SubConfig(object):
     # PathMarker
 
     # Vamp Visual Servo
-    visual_servo_forward_speed = 0.3
+    visual_servo_forward_speed = 0.1
 
     area_ratio = 0.3
     duration = 3.0

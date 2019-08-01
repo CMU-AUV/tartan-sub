@@ -17,7 +17,7 @@ class SubController(object):
 if __name__ == "__main__":
     rospy.init_node('tartan_19_controller', anonymous=True)
 
-    run_config = ConfigMap['Sim']
+    run_config = ConfigMap['Sub']
     sub_controller = SubController(run_config)
 
     gate = Gate(sub_controller, run_config)
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     print("Arming")
     sub_controller.armer.arm()
 
-    sub_controller.mover.dive(4.0, -0.4)
+    sub_controller.mover.dive(2.0, -0.4)
 
     print("Gate")
     # gate.execute()

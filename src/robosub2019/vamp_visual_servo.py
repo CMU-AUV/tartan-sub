@@ -122,7 +122,7 @@ class VampVisualServoing(Task):
 		# print('Message')
 		# print(msg)
 		self.mover.publish(msg)
-	
+
 	def scan_for_target(self):
 		scan_move = 0
 		for i in range(1, len(self.scan_times)):
@@ -161,13 +161,13 @@ class VampVisualServoing(Task):
 	def execute(self):
 		while(not rospy.is_shutdown() and self.state != VampState.Done ):
 			self.update_idx += 1
-			if (self.update_idx % 1000 != 0):
+			if (self.update_idx % 100 != 0):
 				continue
 			if self.prev_state != self.state:
 				print("Current State: " + str(self.state) + " idx " + str(self.update_idx))
 			if self.state == VampState.NothingDetected:
 				self.mover.forward(0.01, self.linear_speed_x)
-				if((self.curr_time > 10.0 and  int(self.curr_time % 50.0) == 2) or self.scan_started):
+				if((self.curr_time > 10.0 and  int(self.curr_time % 15.0) == 2) or self.scan_started):
 					self.scan_for_target()
                                 self.hit = False
 			elif self.state == VampState.FirstFollowing:
