@@ -1,0 +1,5 @@
+nohup: ignoring input
+[0m[ INFO] [1564764130.789519221]: Subscribing to /sj_camera/down_image_raw[0m
+[0m[ INFO] [1564764130.798693069]: Subscribing to /sj_camera/left_image_raw[0m
+[0m[ INFO] [1564764130.805438435]: Subscribing to transdec_data[0m
+[0m[ INFO] [1564764130.812927238]: Recording to 2019-08-02-12-42-10.bag.[0m
