@@ -28,11 +28,11 @@ frameId = 0
 
 rospy.init_node('camera_publisher', anonymous=True)
 
-down = set_cam_params(2)
+down = set_cam_params(1)
 
 
 # Grab both frames first, then retrieve to minimize latency between cameras
-while(True):
+while(not rospy.is_shutdown()):
 
     if not (down.grab()):
         print("No more frames")

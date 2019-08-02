@@ -13,16 +13,11 @@ from cv_bridge import CvBridge, CvBridgeError
 from vision_utilities import bbox, val_idx, bins, preprocess_image
 import numpy as np
 
-GATE_DEPTH = 2
-DICE_ROLL_DURATION = 5
+GATE_DEPTH_S = 4
+DICE_ROLL_DURATION = 2
 GATE_FORWARDS_TIME = 30
 GATE_SPIN_TIME = 5
 GATE_FORWARDS_TIME_POST_FANCY = 5
-GATE_DEPTH_S = 1
-DICE_ROLL_DURATION = 5
-GATE_FORWARDS_TIME = 3
-GATE_SPIN_TIME = 5
-GATE_FORWARDS_TIME_POST_FANCY = 3
 
 class GateState(IntEnum):
     __order__ = "NothingDetected SomethingDetected Done"
@@ -71,9 +66,10 @@ class Gate(Task):
             while not rospy.is_shutdown() and self.state is not GateState.Done:
                 if self.state == GateState.Init:
                     heading_target = self.mover.get_heading()
-                    self.state = GateState.Orienting
+                    self.state = GateState.Waiting
+                    self.waitDeadline = time.time() + DICE_ROLL_DURATION
                 if self.state == GateState.Waiting:
-                    print("time remaining: {}".format(self.waitDeadline - time.time()))
+                    # print("time remaining: {}".format(self.waitDeadline - time.time()))
                     if time.time() >= self.waitDeadline:
                         self.state = GateState.Diving
                 if self.state == GateState.Orienting:
