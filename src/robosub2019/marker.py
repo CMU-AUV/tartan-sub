@@ -39,7 +39,16 @@ class Marker(Task):
         self.k_forwd  = -0.001
         self.k_strafe = -0.001
 
+ 	self.scan_times = [0.0, 3.0, 6.0, 12.0, 15.0, 18.0]
+	# self.scan_state = ['neg_strafe', 'pos_strafe', 'neg_strafe', 'neg_depth', 'pos_depth', 'neg_depth']
+	# self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe', 'neg_strafe']
+	self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe']
+	self.scan_started = False
+	self.scan_dt = 0.1
+	self.scan_curr_t = 0.0
+
         self.start_time = time.time()
+        self.curr_time = time.time()
 
     def scan_for_target(self):
 		scan_move = 0
@@ -82,25 +91,28 @@ class Marker(Task):
         while(not rospy.is_shutdown() and self.state != MarkerState.Done ):
             if self.state == MarkerState.NothingDetected:
                 self.mover.forward(0.01, 0.2)
+		if((self.curr_time > 10.0 and  int(self.curr_time % 10.0) == 2) or self.scan_started):
+                    self.scan_for_target()
             elif self.state == MarkerState.SomethingDetected:
                 self.motion_controller()
             elif self.start_time > self.config.marker_time:
                 self.state = MarkerState.Done
+	    self.curr_time = time.time() - self.start_time
 
     def target_follower(self, target_x, target_y):
-		msg = Twist()
-		d_forwd = self.k_forwd*(self.image_center_y - target_y)
-		d_strafe = self.k_strafe*(self.image_center_x - target_x)
+        msg = Twist()
+        d_forwd = self.k_forwd*(self.image_center_y - target_y)
+        d_strafe = self.k_strafe*(self.image_center_x - target_x)
 
         if(d_forwd < 0.05 and d_strafe < 0.05):
             # self.mover.drop()
             self.state = MarkerState.Done
             return
+        
+        msg.linear.x = d_forwd
+        msg.linear.y = d_strafe
 
-		msg.linear.x = d_forwd
-		msg.linear.y = d_strafe
-
-		self.mover.publish(msg)
+        self.mover.publish(msg)
 
     def image_callback(self, data):
         i = 0

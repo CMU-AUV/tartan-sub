@@ -58,16 +58,17 @@ class VampVisualServoing(Task):
 		self.image_center_y = self.config.camera_dims_y/2
 
 		self.area = self.config.camera_dims_x * self.config.camera_dims_y
+		self.prev_area = self.config.camera_dims_x * self.config.camera_dims_y
 
 		self.idx = None
 		self.update_idx = 0
 
 		self.state = VampState.NothingDetected
-		self.prev_state = None
 
- 		self.scan_times = [0.0, 1.0, 2.0, 4.0, 5.0, 6.0, 7.0]
+ 		self.scan_times = [0.0, 3.0, 6.0, 12.0, 15.0, 18.0]
 		# self.scan_state = ['neg_strafe', 'pos_strafe', 'neg_strafe', 'neg_depth', 'pos_depth', 'neg_depth']
-		self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe', 'neg_strafe']
+		# self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe', 'neg_strafe']
+		self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe']
 		self.scan_started = False
 		self.scan_dt = 0.1
 		self.scan_curr_t = 0.0
@@ -112,6 +113,15 @@ class VampVisualServoing(Task):
 			y_max = msg.bounding_boxes[self.idx].ymax
 
 			bbox_area = (y_max - y_min) * (x_max - x_min)
+			if self.state == VampState.NothingDetected:
+				self.prev_area = bbox_area
+
+			detection_ratio = float(self.prev_area) / float(self.area)
+
+			if(detection_ratio > 10):
+				bbox_area = self.prev_area
+			else:
+				self.prev_area = bbox_area
 
 			self.ratio = float(bbox_area)/float(self.area)
 
@@ -155,6 +165,7 @@ class VampVisualServoing(Task):
 		print("Idx {}, Curr Dt: {}, Curr Move: {}".format(scan_move, self.scan_curr_t, self.scan_state[scan_move]))
 
 		if self.scan_curr_t < 1.0:
+			self.mover.forward(4, -0.4)
 			self.mover.strafe(self.scan_dt, -0.2)
 			self.scan_curr_t += self.scan_dt
 			self.scan_started = True
@@ -190,7 +201,6 @@ class VampVisualServoing(Task):
 			if self.state == VampState.NothingDetected:
 				self.mover.forward(0.01, self.linear_speed_x)
 				if((self.curr_time > 10.0 and  int(self.curr_time % 100.0) == 2) or self.scan_started):
-				    a = 0
                                     self.scan_for_target()
 			elif self.state == VampState.FirstFollowing:
 				self.target_follower(self.target_center_x, self.target_center_y, self.linear_speed_x)
