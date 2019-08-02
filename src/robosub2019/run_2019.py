@@ -4,6 +4,7 @@ import rospy
 from motion_utilities import Mover
 from gate import Gate
 from octagon import Octagon
+from marker import Marker
 from vamp_visual_servo import VampVisualServoing
 from config import ConfigMap, SimConfig, SubConfig
 from armer import Armer
@@ -43,6 +44,16 @@ def main(argv):
     vamp = VampVisualServoing(sub_controller, run_config)
     vamp.execute()
 
+    print("#######################################")
+    print("        R U N     M A R K E R          ")
+    print("#######################################")
+    marker = Marker(sub_controller, run_config)
+    marker.execute()
+
+
+    print("#######################################")
+    print("        R U N     O C T A G O N        ")
+    print("#######################################")
     octagon = Octagon(sub_controller)
     octagon.execute()
 
