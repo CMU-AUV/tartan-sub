@@ -189,7 +189,7 @@ class VampVisualServoing(Task):
 				print("Current State: " + str(self.state) + " idx " + str(self.update_idx))
 			if self.state == VampState.NothingDetected:
 				self.mover.forward(0.01, self.linear_speed_x)
-				if((self.curr_time > 10.0 and  int(self.curr_time % 10.0) == 2) or self.scan_started):
+				if((self.curr_time > 10.0 and  int(self.curr_time % 100.0) == 2) or self.scan_started):
 				    a = 0
                                     self.scan_for_target()
 			elif self.state == VampState.FirstFollowing:
@@ -216,7 +216,7 @@ class VampVisualServoing(Task):
 				self.state = VampState.FindSecond
 			elif self.state == VampState.FindSecond:
 				self.mover.forward(0.01, self.linear_speed_x)
-				if((self.curr_time > 10.0 and  int(self.curr_time % 10.0) == 2) or self.scan_started):
+				if((self.curr_time > 10.0 and  int(self.curr_time % 100.0) == 2) or self.scan_started):
 					self.scan_for_target()
 			elif self.state == VampState.SecondFollowing:
 				self.target_follower(self.target_center_x, self.target_center_y, self.linear_speed_x)

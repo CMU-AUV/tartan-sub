@@ -24,4 +24,5 @@ class Octagon(Task):
     def execute(self, type='naive'):
         self.mover.target_heading_relative(np.pi, 15)
         self.mover.forward(OCT_FORWARDS_TIME, 0.3)
+        self.mover.dive(OCT_DEPTH_S, 0.3)
 

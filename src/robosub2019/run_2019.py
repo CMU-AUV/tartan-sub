@@ -3,6 +3,7 @@ import rospy
 
 from motion_utilities import Mover
 from gate import Gate
+from octagon import Octagon
 from vamp_visual_servo import VampVisualServoing
 from config import ConfigMap, SimConfig, SubConfig
 from armer import Armer
@@ -31,8 +32,10 @@ def main(argv):
 
     gate = Gate(sub_controller, run_config)
     gate.execute("fancy")
+    # sub_controller.mover.dive(1, -0.2)
 
-    #sub_controller.mover.target_heading_relative(-0.1, timeout_s=10)
+    sub_controller.mover.target_heading_relative(-0.2, timeout_s=10)
+    sub_controller.mover.forward(4, 0.4)
 
     print("#######################################")
     print("        R U N     V A M P S            ")

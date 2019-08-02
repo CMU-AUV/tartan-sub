@@ -42,7 +42,7 @@ class SubConfig(object):
 
     visual_servo_kp_yaw = -0.001
     visual_servo_kp_alt = -0.001
-    target_seq = ['jia', 'dra', 'Vet', 'asw']
+    target_seq = ['jia', 'asw', 'Vet', 'dra']
 
 class SimConfig(object):
     # Topics
@@ -84,7 +84,7 @@ class SimConfig(object):
 
     visual_servo_kp_alt = -0.0010
     visual_servo_kp_yaw = 0.0005
-    target_seq = ['jia', 'Vet', 'dra', 'asw']
+    target_seq = ['jia', 'asw', 'Vet', 'dra']
 
 ConfigMap = {
     "Sub" : SubConfig, "Sim" : SimConfig
