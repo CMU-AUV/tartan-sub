@@ -40,9 +40,7 @@ class Marker(Task):
         self.k_forwd  = -0.001
         self.k_strafe = 0.001
 
-        self.scan_times = [0.0, 3.0, 6.0, 12.0, 15.0, 18.0]
-        # self.scan_state = ['neg_strafe', 'pos_strafe', 'neg_strafe', 'neg_depth', 'pos_depth', 'neg_depth']
-        # self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe', 'neg_strafe']
+        self.scan_times = [0.0, 3.0, 4.0, 10.0, 11.0, 14.0]
         self.scan_state = ['neg_strafe', 'neg_forward', 'pos_strafe', 'pos_forward', 'neg_strafe']
         self.scan_started = False
         self.scan_dt = 0.1
@@ -95,10 +93,11 @@ class Marker(Task):
         self.mover.dive(3, -0.4)
         while(not rospy.is_shutdown() and self.state != MarkerState.Done ):
             if self.curr_time > self.config.marker_time:
+                # self.mover.drop_markers()
                 self.state = MarkerState.Done
             elif self.state == MarkerState.NothingDetected:
                 self.mover.forward(0.01, 0.2)
-                if((self.curr_time > 10.0 and int(self.curr_time % 30.0) == 2) or self.scan_started):
+                if((self.curr_time > 10.0 and int(self.curr_time % 20.0) == 2) or self.scan_started):
                     self.scan_for_target()
                 self.mover.dive(0.01, -0.1)
             elif self.state == MarkerState.SomethingDetected:
@@ -114,7 +113,7 @@ class Marker(Task):
         print("Marker Target Command: F:{} S:{}".format(d_forwd, d_strafe))
 
         if(d_forwd < 0.05 and d_strafe < 0.05):
-            # self.mover.drop()
+            # self.mover.drop_markers()
             print("******* DROP ************")
             self.mover.dive(1.0, -0.3)
             self.state = MarkerState.Done
@@ -130,10 +129,11 @@ class Marker(Task):
         i = 0
         try:
             cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-            self.image = preprocess_image(cv_image)
-            wolf_bbox = self.find_marker(cv_image, self.image, self.wolf_templ, (0,0,255))
-            bat_bbox = self.find_marker(cv_image, self.image, self.bat_templ, (255,0,0))
-            bat_bbox2 = self.find_marker(cv_image, self.image, self.bat_templ2, (255,0,0))
+            cv.imshow("Down", cv_image)
+            self.image = preprocess_image(cv_image, 'orig')
+            wolf_bbox = self.find_marker(self.image, self.image, self.wolf_templ, (0,0,255))
+            bat_bbox = self.find_marker(self.image, self.image, self.bat_templ, (255,0,0))
+            bat_bbox2 = self.find_marker(self.image, self.image, self.bat_templ2, (0,255,0))
 
             bb = None
             if(len(wolf_bbox) > 0):
@@ -143,7 +143,7 @@ class Marker(Task):
             elif(len(bat_bbox2) > 0):
                 bb = bat_bbox[0]
 
-            if(bb)
+            if(bb):
                 print("*********** DETECTED ***************")
                 x_max = bb.tl + bb.w
                 x_min = bb.tl
@@ -158,9 +158,9 @@ class Marker(Task):
 
         except CvBridgeError as e:
             print(e)
-        cv2.waitKey(5)
+        cv.waitKey(5)
 
-    def find_marker(self, orig, src, template, marker_threshold=0.65):
+    def find_marker(self, orig, src, template, color, marker_threshold=0.65):
         img = src.copy()
         img_w, img_h = src.shape
         w, h = template.shape
@@ -176,6 +176,8 @@ class Marker(Task):
             # Apply template Matching
             res = cv.matchTemplate(resize_i, template, eval('cv.TM_CCOEFF_NORMED'))
 
+            print(res.shape)
+
             orig_res = res
             threshold = marker_threshold
             loc = np.where( res >= threshold)
@@ -186,6 +188,7 @@ class Marker(Task):
                 w = w*int(scales_s[scale_i])
                 h = h*int(scales_s[scale_i])
                 bb = bbox(tl, tr, w, h)
+                cv.rectangle(orig, (tl,tr), ((tl + h), (tr + w)), color, 1)
                 # Fix this
                 BBox.append(bb)
 
@@ -204,6 +207,7 @@ class Marker(Task):
                 w = w*int(scales_l[scale_i])
                 h = h*int(scales_l[scale_i])
                 bb = bbox(tl, tr, w, h)
+                cv.rectangle(orig, (tl,tr), ((tl + h), (tr + w)), color, 1)
                 # Fix this
                 BBox.append(bb)
 

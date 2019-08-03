@@ -31,7 +31,12 @@ class Maestro:
     # example, '/dev/ttyACM2' or for Windows, something like 'COM3'.
     def __init__(self,ttyStr='/dev/serial/by-id/usb-Pololu_Corporation_Pololu_Micro_Maestro_6-Servo_Controller_00251776-if00',device=0x0c):
         # Open the command port
-        self.usb = serial.Serial(ttyStr)
+        try:
+            self.usb = serial.Serial(ttyStr)
+            self.init = True
+        except serial.serialutil.SerialException:
+            print("Could not find Maestro servo controller! Is it connected and configured as dual port?")
+            self.init = False
         # Command lead-in and device number are sent for each Pololu serial command.
         self.PololuCmd = chr(0xaa) + chr(device)
         # Track target position for each servo. The function isMoving() will
@@ -44,11 +49,19 @@ class Maestro:
 
     # Cleanup by closing USB serial port
     def close(self):
+        if not self.init:
+            print("Maestro not connected!")
+            return False
         self.usb.close()
+        return True
 
     # Send a Pololu command out the serial port
     def sendCmd(self, cmd):
         cmdStr = self.PololuCmd + cmd
+        if not self.init:
+            print("Maestro not connected!")
+            return False
+
         if PY2:
             self.usb.write(cmdStr)
         else:
@@ -80,7 +93,7 @@ class Maestro:
     # Servo center is at 1500 microseconds, or 6000 quarter-microseconds
     # Typcially valid servo range is 3000 to 9000 quarter-microseconds
     # If channel is configured for digital output, values < 6000 = Low ouput
-    def setTarget(self, chan, target):
+    def setTarget(self, target, chan=0):
         # if Min is defined and Target is below, force to Min
         if self.Mins[chan] > 0 and target < self.Mins[chan]:
             target = self.Mins[chan]
