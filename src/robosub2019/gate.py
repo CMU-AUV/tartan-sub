@@ -55,8 +55,6 @@ class Gate(Task):
                     self.mover.forward(0.01, self.config.gate_forward_speed)
                 elif self.state == GateState.SomethingDetected:
                     self.motion_controller()
-                elif self.start_time > self.config.gate_time:
-                    self.state = GateState.Done
                 self.left = 0
                 self.right = 0
                 self.middle = 0
