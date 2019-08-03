@@ -29,6 +29,7 @@ class Marker(Task):
         self.bridge = CvBridge()
 
         self.bat_templ = preprocess_image(cv.imread('bat.jpg'), 'bat')
+        self.bat_templ2 = preprocess_image(cv.imread('bat2.jpg'), 'bat')
         self.wolf_templ = preprocess_image(cv.imread('wolf.jpg'), 'wolf')
 
         self.visualize = run_config.visualize
@@ -132,11 +133,14 @@ class Marker(Task):
             self.image = preprocess_image(cv_image)
             wolf_bbox = self.find_marker(cv_image, self.image, self.wolf_templ, (0,0,255))
             bat_bbox = self.find_marker(cv_image, self.image, self.bat_templ, (255,0,0))
+            bat_bbox2 = self.find_marker(cv_image, self.image, self.bat_templ2, (255,0,0))
 
             bb = None
             if(len(wolf_bbox) > 0):
                 bb = wolf_bbox[0]
             elif(len(bat_bbox) > 0):
+                bb = bat_bbox[0]
+            elif(len(bat_bbox2) > 0):
                 bb = bat_bbox[0]
 
             if(bb)
