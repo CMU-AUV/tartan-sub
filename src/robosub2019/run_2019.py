@@ -32,11 +32,11 @@ def main(argv):
     print("#######################################")
 
     gate = Gate(sub_controller, run_config)
-    gate.execute("fancy")
+    #gate.execute("fancy")
     sub_controller.mover.dive(1, -0.2)
 
-    sub_controller.mover.target_heading_relative(-0.2, timeout_s=10) # Right turn
-    sub_controller.mover.forward(5, 0.4)
+    #sub_controller.mover.target_heading_relative(-0.2, timeout_s=10) # Right turn
+    #sub_controller.mover.forward(5, 0.4)
 
     print("#######################################")
     print("        R U N     V A M P S            ")
@@ -50,8 +50,8 @@ def main(argv):
     print("#######################################")
     print("        R U N     M A R K E R          ")
     print("#######################################")
-    marker = Marker(sub_controller, run_config)
-    marker.execute()
+    #marker = Marker(sub_controller, run_config)
+    #marker.execute()
 
     sub_controller.mover.target_heading_relative(0.3, 15) # Left turn
 

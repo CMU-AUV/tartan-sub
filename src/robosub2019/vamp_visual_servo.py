@@ -193,6 +193,7 @@ class VampVisualServoing(Task):
 			self.scan_curr_t += self.scan_dt
 
 	def execute(self):
+                self.state = VampState.GotoSecond
 		while(not rospy.is_shutdown() and self.state != VampState.Done ):
 			self.update_idx += 1
 			if (self.update_idx % 100 != 0):
@@ -225,6 +226,7 @@ class VampVisualServoing(Task):
 				# self.mover.forward(1.5, 0.3)
                                 # self.mover.target_heading_relative(np.pi, 10)
                                 print("Finding second vamp..")
+                                return
 				self.state = VampState.FindSecond
 			elif self.state == VampState.FindSecond:
 				self.mover.forward(0.01, self.linear_speed_x)
