@@ -43,6 +43,8 @@ def main(argv):
     print("#######################################")
     # vamp = VampVisualServoing(sub_controller, run_config)
     # vamp.execute()
+    
+    sub_controller.mover.target_heading_relative(np.pi, 15)
 
     print("#######################################")
     print("        R U N     M A R K E R          ")

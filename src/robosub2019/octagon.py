@@ -22,6 +22,5 @@ class Octagon(Task):
     def __init__(self, sub_controller):
         self.mover = sub_controller.mover
     def execute(self, type='naive'):
-        self.mover.target_heading_relative(OCT_ANGLE, 15)
         self.mover.forward(OCT_FORWARDS_TIME, 0.3)
         self.mover.dive(OCT_DEPTH_S, 0.3)
