@@ -12,6 +12,7 @@ class SubConfig(object):
     camera_topic = "/sj_camera/left_image_raw"
     left_camera_topic = "/sj_camera/left_image_raw"
     right_camera_topic = "/sj_camera/right_image_raw"
+    down_camera_topic = "/sj_camera/down_image_raw"
     imu_topic = "/mavros/imu/data"
     depth_topic = "/mavros/imu/diff_pressure"
 
@@ -54,6 +55,7 @@ class SimConfig(object):
     camera_topic = "/rexrov/rexrov/camera/camera_image"
     left_camera_topic = "/rexrov/rexrov/cameraleft/camera_image"
     right_camera_topic = "/rexrov/rexrov/cameraright/camera_image"
+    down_camera_topic = "/rexrov/rexrov/cameradown/camera_image"
     imu_topic = "/rexrov/imu"
     depth_topic = "/rexrov/pressure"
 
