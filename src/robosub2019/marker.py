@@ -41,7 +41,7 @@ class Marker(Task):
         self.k_strafe = 0.001
 
         self.scan_times = [0.0, 3.0, 4.0, 10.0, 11.0, 14.0]
-        self.scan_state = ['neg_strafe', 'neg_forward', 'pos_strafe', 'pos_forward', 'neg_strafe']
+        self.scan_state = ['neg_strafe', 'pos_forward', 'pos_strafe', 'neg_forward', 'neg_strafe']
         self.scan_started = False
         self.scan_dt = 0.1
         self.scan_curr_t = 0.0
@@ -92,13 +92,12 @@ class Marker(Task):
         self.mover.forward(4, 0.4)
         self.mover.dive(3, -0.4)
         while(not rospy.is_shutdown() and self.state != MarkerState.Done ):
-            if self.curr_time > self.config.marker_time:
+            print("State: {}".format(self.state))
+            if (time.time() - self.start_time) > self.config.marker_time:
                 # self.mover.drop_markers()
                 self.state = MarkerState.Done
             elif self.state == MarkerState.NothingDetected:
-                self.mover.forward(0.01, 0.2)
-                if((self.curr_time > 10.0 and int(self.curr_time % 20.0) == 2) or self.scan_started):
-                    self.scan_for_target()
+                self.scan_for_target()
                 self.mover.dive(0.01, -0.1)
             elif self.state == MarkerState.SomethingDetected:
                 self.target_follower(self.target_center_x, self.target_center_y)
@@ -175,8 +174,6 @@ class Marker(Task):
             resize_i = cv.resize(img, None,fx=scale, fy=scale, interpolation = cv.INTER_AREA)
             # Apply template Matching
             res = cv.matchTemplate(resize_i, template, eval('cv.TM_CCOEFF_NORMED'))
-
-            print(res.shape)
 
             orig_res = res
             threshold = marker_threshold
