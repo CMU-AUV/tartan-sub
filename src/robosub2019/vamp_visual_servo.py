@@ -64,6 +64,7 @@ class VampVisualServoing(Task):
 		self.update_idx = 0
 
 		self.state = VampState.NothingDetected
+		self.prev_state = VampState.NothingDetected
 
  		self.scan_times = [0.0, 3.0, 6.0, 12.0, 15.0, 18.0]
 		# self.scan_state = ['neg_strafe', 'pos_strafe', 'neg_strafe', 'neg_depth', 'pos_depth', 'neg_depth']
@@ -194,7 +195,7 @@ class VampVisualServoing(Task):
 	def execute(self):
 		while(not rospy.is_shutdown() and self.state != VampState.Done ):
 			self.update_idx += 1
-			if (self.update_idx % 10 != 0):
+			if (self.update_idx % 100 != 0):
 				continue
 			if self.prev_state != self.state:
 				print("Current State: " + str(self.state) + " idx " + str(self.update_idx))
@@ -238,4 +239,3 @@ class VampVisualServoing(Task):
 					self.state = VampState.Done
 			self.prev_state = self.state
 			self.curr_time = time.time() - self.start_time
-			# print("Time: {}".format(self.curr_time))
