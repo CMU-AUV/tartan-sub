@@ -218,6 +218,7 @@ class VampVisualServoing(Task):
 				self.mover.forward(11.0, 0.3)
                                 self.mover.dive(1, -0.4)
                                 self.mover.target_heading_relative(np.pi, 15)
+				self.mover.strafe(1.0, 0.2) #strafe left
                                 # self.mover.turn(12, 0.3)
 				# self.state = VampState.FindSecond
 				# self.mover.strafe(0.5, 0.4)

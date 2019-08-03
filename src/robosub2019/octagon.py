@@ -13,8 +13,8 @@ from cv_bridge import CvBridge, CvBridgeError
 from vision_utilities import bbox, val_idx, bins, preprocess_image
 import numpy as np
 
-OCT_DEPTH_S = 6
-OCT_FORWARDS_TIME = 25
+OCT_DEPTH_S = 7
+OCT_FORWARDS_TIME = 15
 OCT_ANGLE = np.pi
 
 
