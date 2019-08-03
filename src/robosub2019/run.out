@@ -1,12 +1,71 @@
 nohup: ignoring input
 /home/tartanauv/.local/lib/python2.7/site-packages/simple_pid/PID.py:22: UserWarning: time.monotonic() not available in python < 3.3, using time.time() as fallback
   warnings.warn('time.monotonic() not available in python < 3.3, using time.time() as fallback')
+Starting run!
+Arming
+#######################################
+        R U N     G A T E S            
+#######################################
+#######################################
+        R U N     V A M P S            
+#######################################
+#######################################
+        R U N     M A R K E R          
+#######################################
+curr depth: 0.0, cal: None
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+heading: 0.0 -> 0.3 (0.2); depth: 0.0 -> 0 (0.0)
+Timed out waiting 7s to hit targets
+#######################################
+        R U N     O C T A G O N        
+#######################################
 Traceback (most recent call last):
-  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/run_2019.py", line 5, in <module>
-    from gate import Gate
-  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/gate.py", line 13, in <module>
-    from vision_utilities import bbox, val_idx, bins, preprocess_image
-  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/vision_utilities.py", line 80
-    if type == 'bat'
-                   ^
-SyntaxError: invalid syntax
+  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/run_2019.py", line 71, in <module>
+    main(sys.argv)
+  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/run_2019.py", line 63, in main
+    octagon.execute()
+  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/octagon.py", line 25, in execute
+    self.mover.forward(OCT_FORWARDS_TIME, 0.3)
+  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/motion_utilities.py", line 182, in forward
+    self._send_message_duration_(msg, duration)
+  File "/home/tartanauv/catkin_ws/src/tartan-sub/src/robosub2019/motion_utilities.py", line 89, in _send_message_duration_
+    self.pub.publish(msg)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/rospy/topics.py", line 881, in publish
+    self.impl.acquire()
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/rospy/topics.py", line 979, in acquire
+    self.publock.acquire()
+AttributeError: 'NoneType' object has no attribute 'acquire'
