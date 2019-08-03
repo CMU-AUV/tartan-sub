@@ -21,7 +21,7 @@ class SubController(object):
 def main(argv):
     rospy.init_node('tartan_19_controller', anonymous=True)
 
-    run_config = ConfigMap['Sub']
+    run_config = ConfigMap['Sim']
     sub_controller = SubController(run_config)
 
     print("Arming")
@@ -31,21 +31,21 @@ def main(argv):
     print("        R U N     G A T E S            ")
     print("#######################################")
 
-    gate = Gate(sub_controller, run_config)
-    gate.execute("fancy")
-    sub_controller.mover.dive(1, -0.2)
+    # gate = Gate(sub_controller, run_config)
+    # gate.execute("fancy")
+    # sub_controller.mover.dive(1, -0.2)
 
-    sub_controller.mover.target_heading_relative(-0.2, timeout_s=10) # Right turn
-    sub_controller.mover.forward(5, 0.4)
+    # sub_controller.mover.target_heading_relative(-0.2, timeout_s=10) # Right turn
+    # sub_controller.mover.forward(5, 0.4)
 
     print("#######################################")
     print("        R U N     V A M P S            ")
     print("#######################################")
-    vamp = VampVisualServoing(sub_controller, run_config)
-    vamp.execute()
+    # vamp = VampVisualServoing(sub_controller, run_config)
+    # vamp.execute()
 
-    sub_controller.mover.target_heading_relative(np.pi, 15)
-    sub_controller.mover.target_heading_relative(-0.2, 15) # Right turn
+    # sub_controller.mover.target_heading_relative(np.pi, 15)
+    # sub_controller.mover.target_heading_relative(-0.2, 15) # Right turn
 
     print("#######################################")
     print("        R U N     M A R K E R          ")

@@ -214,7 +214,7 @@ class VampVisualServoing(Task):
 				    print("state firstfollowing -> gotosecond")
                                     self.state = VampState.GotoSecond
 			elif self.state == VampState.GotoSecond:
-				self.mover.strafe(2.5, 0.3) #strafe left
+				self.mover.strafe(2.5, -0.3) #strafe right
 				self.mover.forward(11.0, 0.3)
                                 self.mover.dive(1, -0.4)
                                 self.mover.target_heading_relative(np.pi, 15)

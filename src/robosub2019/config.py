@@ -43,7 +43,7 @@ class SubConfig(object):
 
     visual_servo_kp_yaw = -0.001
     visual_servo_kp_alt = -0.001
-    target_seq = ['jia', 'asw', 'Vet', 'dra']
+    target_seq = ['jia', 'dra', 'asw', 'Vet']
 
     # Marker
     marker_time = 60.0
@@ -89,7 +89,7 @@ class SimConfig(object):
 
     visual_servo_kp_alt = -0.0010
     visual_servo_kp_yaw = 0.0005
-    target_seq = ['jia', 'asw', 'Vet', 'dra']
+    target_seq = ['jia', 'Vet', 'asw,' 'dra']
 
     # Marker
     marker_time = 60.0
