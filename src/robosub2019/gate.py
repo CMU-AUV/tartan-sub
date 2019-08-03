@@ -33,7 +33,6 @@ class GateState(IntEnum):
     Diving = 10
 
 
-
 class Gate(Task):
     def __init__(self, sub_controller, run_config):
         self.mover = sub_controller.mover

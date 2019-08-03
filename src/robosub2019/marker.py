@@ -37,7 +37,7 @@ class Marker(Task):
         self.image_center_y = self.config.camera_dims_y/2
 
         self.k_forwd  = -0.001
-        self.k_strafe = -0.001
+        self.k_strafe = 0.001
 
  	self.scan_times = [0.0, 3.0, 6.0, 12.0, 15.0, 18.0]
 	# self.scan_state = ['neg_strafe', 'pos_strafe', 'neg_strafe', 'neg_depth', 'pos_depth', 'neg_depth']
@@ -91,8 +91,7 @@ class Marker(Task):
 	    self.scan_curr_t += self.scan_dt
 
     def execute(self):
-        self.mover.dive(3, -0.3)
-        self.mover.forward(4, 0.4)
+        self.mover.forward(3, 0.4)
         while(not rospy.is_shutdown() and self.state != MarkerState.Done ):
             if self.curr_time > self.config.marker_time:
                 self.state = MarkerState.Done
@@ -113,9 +112,10 @@ class Marker(Task):
         if(d_forwd < 0.05 and d_strafe < 0.05):
             # self.mover.drop()
             print("******* DROP ************")
+            self.mover.dive(3.0, -0.3)
             self.state = MarkerState.Done
             return
-        
+        msg.linear.z = -0.1 
         msg.linear.x = d_forwd
         msg.linear.y = d_strafe
 
@@ -145,7 +145,7 @@ class Marker(Task):
 
         except CvBridgeError as e:
             print(e)
-            cv2.waitKey(20)
+        cv2.waitKey(5)
 
     def find_marker(self, orig, src, template, marker_threshold=0.65):
         img = src.copy()
