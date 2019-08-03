@@ -15,9 +15,9 @@ import numpy as np
 
 GATE_DEPTH_S = 4
 DICE_ROLL_DURATION = 2
-GATE_FORWARDS_TIME = 30
+GATE_FORWARDS_TIME = 35
 GATE_SPIN_TIME = 5
-GATE_FORWARDS_TIME_POST_FANCY = 5
+GATE_FORWARDS_TIME_POST_FANCY = 10
 
 class GateState(IntEnum):
     __order__ = "NothingDetected SomethingDetected Done"
@@ -37,27 +37,11 @@ class Gate(Task):
     def __init__(self, sub_controller, run_config):
         self.mover = sub_controller.mover
         self.config = run_config
-        self.camera_sub = rospy.Subscriber(self.config.camera_topic, Image, self.image_callback)
-        self.bridge = CvBridge()
-        # self.templ_left = preprocess_image(cv.imread(self.config.templates_folder + '/left_gate.jpg'))
-        # self.templ_right = preprocess_image(cv.imread(self.config.templates_folder + '/right_gate.jpg'))
-        # self.templ_middle = preprocess_image(cv.imread(self.config.templates_folder + '/middle_gate.jpg'))
         self.visualize = run_config.visualize
         self.sub_center = self.config.camera_dims_x/2
 
     def execute(self, type='naive'):
-        if type == 'temp_matching':
-            self.mover.dive(self.config.gate_depth_time, self.config.gate_depth_speed)
-            while(not rospy.is_shutdown() and self.state != GateState.Done ):
-                print("Current State: " + str(self.state))
-                if self.state == GateState.NothingDetected:
-                    self.mover.forward(0.01, self.config.gate_forward_speed)
-                elif self.state == GateState.SomethingDetected:
-                    self.motion_controller()
-                self.left = 0
-                self.right = 0
-                self.middle = 0
-        elif type == 'fancy':
+        if type == 'fancy':
             self.state = GateState.Init
             heading_target = 0
             while not rospy.is_shutdown() and self.state is not GateState.Done:

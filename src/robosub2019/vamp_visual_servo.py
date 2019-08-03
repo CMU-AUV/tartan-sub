@@ -193,7 +193,6 @@ class VampVisualServoing(Task):
 			self.scan_curr_t += self.scan_dt
 
 	def execute(self):
-                self.state = VampState.GotoSecond
 		while(not rospy.is_shutdown() and self.state != VampState.Done ):
 			self.update_idx += 1
 			if (self.update_idx % 100 != 0):

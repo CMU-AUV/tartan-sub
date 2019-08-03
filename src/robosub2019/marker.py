@@ -89,10 +89,11 @@ class Marker(Task):
             return
 
     def execute(self):
+        print("executing marker")
         self.mover.forward(4, 0.4)
         self.mover.dive(3, -0.4)
+        print("scanning...")
         while(not rospy.is_shutdown() and self.state != MarkerState.Done ):
-            print("State: {}".format(self.state))
             if (time.time() - self.start_time) > self.config.marker_time:
                 # self.mover.drop_markers()
                 self.state = MarkerState.Done

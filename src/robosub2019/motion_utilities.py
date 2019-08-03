@@ -9,7 +9,6 @@ from std_msgs.msg import Int8, Float64
 import rospy
 import time
 import tf
-from maestro import Maestro
 
 PASCAL_TO_ATM = 101325.0
 ATM_TO_METERS = 10.33492
@@ -32,8 +31,8 @@ class Mover(object):
     def __init__(self, run_config):
         self.heading_pid = PID(1.2, 0.4, 0.15, setpoint=0)
         self.depth_pid = PID(0.4, 0, 0.1, setpoint=0)
-        self.dropper = Maestro()
-        self.dropper.setTarget(6500)
+        #self.dropper = Maestro()
+        #self.dropper.setTarget(6500)
 
         self.config = run_config
         self.pub = rospy.Publisher(self.config.mover_topic, Twist, queue_size=2)
@@ -187,7 +186,8 @@ class Mover(object):
         self._send_message_duration_(msg, duration)
 
     def drop_markers(self):
-        self.dropper.setTarget(5, 5500)
+        return
+        #self.dropper.setTarget(5, 5500)
 
     def strafe(self, duration, speed):
         msg = Twist()
