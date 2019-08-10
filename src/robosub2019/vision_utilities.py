@@ -75,11 +75,13 @@ def check_bbox_hsv(s_img, bbox, threshold= 0.30):
     else:
         return True
 
-def preprocess_image(orig):
+def preprocess_image(orig, type_i):
     image = orig.copy()
-    image = cv2.resize(image, None,fx=1.0/3.0, fy=1.0/2.25, interpolation = cv2.INTER_AREA)
+    if type_i == 'bat':
+        image = cv2.resize(image, None,fx=1.0/3.0, fy=1.0/2.25, interpolation = cv2.INTER_AREA)
+    if type_i == 'wolf':
+        image = cv2.resize(image, None,fx=1.0/4.0, fy=1.0/3.25, interpolation = cv2.INTER_AREA)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    # image_gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     return image[:, :, 1]
 
 

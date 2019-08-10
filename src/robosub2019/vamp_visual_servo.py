@@ -2,6 +2,7 @@
 import sys
 import cv2
 import time
+import numpy as np
 
 import roslib
 import rospy
@@ -29,6 +30,7 @@ class VampState(IntEnum):
 
 JERK_DUR = 100.0 * (1.0/1000.0)
 JERK_THRESH = 0.2
+SERVO_ASCEND_LIMIT = 0.1
 
 class VampVisualServoing(Task):
 	def __init__(self, sub_controller, run_config):
@@ -56,15 +58,18 @@ class VampVisualServoing(Task):
 		self.image_center_y = self.config.camera_dims_y/2
 
 		self.area = self.config.camera_dims_x * self.config.camera_dims_y
+		self.prev_area = self.config.camera_dims_x * self.config.camera_dims_y
 
 		self.idx = None
 		self.update_idx = 0
 
 		self.state = VampState.NothingDetected
-		self.prev_state = None
+		self.prev_state = VampState.NothingDetected
 
- 		self.scan_times = [0.0, 1.0, 3.0, 4.0, 5.0, 7.0, 8.0]
-		self.scan_state = ['neg_yaw', 'pos_yaw', 'neg_yaw', 'neg_depth', 'pos_depth', 'neg_depth']
+ 		self.scan_times = [0.0, 3.0, 6.0, 12.0, 15.0, 18.0]
+		# self.scan_state = ['neg_strafe', 'pos_strafe', 'neg_strafe', 'neg_depth', 'pos_depth', 'neg_depth']
+		# self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe', 'neg_strafe']
+		self.scan_state = ['neg_strafe', 'neg_depth', 'pos_strafe', 'pos_depth', 'neg_strafe']
 		self.scan_started = False
 		self.scan_dt = 0.1
 		self.scan_curr_t = 0.0
@@ -73,18 +78,33 @@ class VampVisualServoing(Task):
 		self.start_time = time.time()
 
 	def bbox_callback(self, msg):
-		target_vamp = 'None'
+		target_vamp_1 = 'None'
+		target_vamp_2 = 'None'
+		target_vamp_3 = 'None'
 		if self.state <= VampState.FirstFollowing:
-			target_vamp = self.config.target_seq[0]
+			target_vamp_1 = self.config.target_seq[0]
+			target_vamp_2 = self.config.target_seq[0]
+			target_vamp_3 = self.config.target_seq[0]
 		elif self.state >= VampState.FindSecond:
-			target_vamp = self.config.target_seq[1]
+			target_vamp_1 = self.config.target_seq[1]
+			target_vamp_2 = self.config.target_seq[2]
+			target_vamp_3 = self.config.target_seq[3]
 
 		self.detected_target = False
 
 		for i in range(len(msg.bounding_boxes)):
-			if msg.bounding_boxes[i].Class == target_vamp:
+			if msg.bounding_boxes[i].Class == target_vamp_1:
 				self.idx = i
 				self.detected_target = True
+				break
+			elif msg.bounding_boxes[i].Class == target_vamp_2:
+				self.idx = i
+				self.detected_target = True
+				break
+			elif msg.bounding_boxes[i].Class == target_vamp_3:
+				self.idx = i
+				self.detected_target = True
+				break
 
 		if self.detected_target:
 			x_min = msg.bounding_boxes[self.idx].xmin
@@ -94,6 +114,15 @@ class VampVisualServoing(Task):
 			y_max = msg.bounding_boxes[self.idx].ymax
 
 			bbox_area = (y_max - y_min) * (x_max - x_min)
+			if self.state == VampState.NothingDetected:
+				self.prev_area = bbox_area
+
+			detection_ratio = float(self.prev_area) / float(self.area)
+
+			if(detection_ratio > 10):
+				bbox_area = self.prev_area
+			else:
+				self.prev_area = bbox_area
 
 			self.ratio = float(bbox_area)/float(self.area)
 
@@ -115,6 +144,10 @@ class VampVisualServoing(Task):
 		d_alt = self.k_alt*(self.image_center_y - target_y)
 		d_yaw = self.k_yaw*(self.image_center_x - target_x)
 
+                # limit ascend speed:
+                if d_alt > SERVO_ASCEND_LIMIT:
+                    d_alt = SERVO_ASCEND_LIMIT
+
 		msg.linear.x = target_speed
 		msg.linear.z = -d_alt
 		msg.angular.z = d_yaw
@@ -133,7 +166,8 @@ class VampVisualServoing(Task):
 		print("Idx {}, Curr Dt: {}, Curr Move: {}".format(scan_move, self.scan_curr_t, self.scan_state[scan_move]))
 
 		if self.scan_curr_t < 1.0:
-			self.mover.turn(self.scan_dt, 0.1)
+			self.mover.forward(4, -0.4)
+			self.mover.strafe(self.scan_dt, -0.2)
 			self.scan_curr_t += self.scan_dt
 			self.scan_started = True
 			return
@@ -142,20 +176,20 @@ class VampVisualServoing(Task):
 			self.scan_curr_t = 0
 			self.scan_started = False
 			return
-		elif self.scan_state[scan_move] == 'neg_yaw':
-			self.mover.turn(self.scan_dt, -0.1)
+		elif self.scan_state[scan_move] == 'neg_strafe':
+			self.mover.strafe(self.scan_dt, -0.2)
 			self.scan_curr_t += self.scan_dt
 			return
-		elif self.scan_state[scan_move] == 'pos_yaw':
-			self.mover.turn(self.scan_dt, 0.1)
+		elif self.scan_state[scan_move] == 'pos_strafe':
+			self.mover.strafe(self.scan_dt, 0.2)
 			self.scan_curr_t += self.scan_dt
 			return
 		elif self.scan_state[scan_move] == 'neg_depth':
-			self.mover.dive(self.scan_dt, -0.1)
+			self.mover.dive(self.scan_dt, -0.2)
 			self.scan_curr_t += self.scan_dt
 			return
 		elif self.scan_state[scan_move] == 'pos_depth':
-			self.mover.turn(self.scan_dt, 0.1)
+			self.mover.dive(self.scan_dt, 0.2)
 			self.scan_curr_t += self.scan_dt
 
 	def execute(self):
@@ -167,34 +201,43 @@ class VampVisualServoing(Task):
 				print("Current State: " + str(self.state) + " idx " + str(self.update_idx))
 			if self.state == VampState.NothingDetected:
 				self.mover.forward(0.01, self.linear_speed_x)
-				if((self.curr_time > 10.0 and  int(self.curr_time % 15.0) == 2) or self.scan_started):
-					self.scan_for_target()
-                                self.hit = False
+				if((self.curr_time > 10.0 and  int(self.curr_time % 100.0) == 2) or self.scan_started):
+                                    self.scan_for_target()
 			elif self.state == VampState.FirstFollowing:
 				self.target_follower(self.target_center_x, self.target_center_y, self.linear_speed_x)
 				if (self.ratio >= self.config.area_ratio):
-					end_time = self.config.duration + time.time()
-					while time.time() < end_time and not rospy.is_shutdown():
-						self.target_follower(self.target_center_x, self.target_center_y, 0.1)
-					self.mover.forward(7.0, -2*self.linear_speed_x)
-					self.state = VampState.GotoSecond
+				    print("vamp collision timer triggered!")
+                                    end_time = 5 + time.time()
+				    while time.time() < end_time and not rospy.is_shutdown():
+					self.target_follower(self.target_center_x, self.target_center_y, 0.3)
+				    self.mover.forward(2.0, -0.4)
+				    print("state firstfollowing -> gotosecond")
+                                    self.state = VampState.GotoSecond
 			elif self.state == VampState.GotoSecond:
-				self.mover.dive(3.0, 2*self.linear_speed_x)
-				self.mover.turn(2.0, -self.linear_speed_x)
-				self.mover.forward(15.0, 2*self.linear_speed_x)
-				self.mover.turn(2.0, -self.linear_speed_x)
-				self.mover.dive(3.0, -2*self.linear_speed_x)
+				self.mover.strafe(2.5, -0.3) #strafe right
+				self.mover.forward(11.0, 0.3)
+                                self.mover.dive(1, -0.4)
+                                self.mover.target_heading_relative(np.pi, 15)
+				self.mover.strafe(1.0, 0.2) #strafe left
+                                # self.mover.turn(12, 0.3)
+				# self.state = VampState.FindSecond
+				# self.mover.strafe(0.5, 0.4)
+				# self.mover.forward(1.5, 0.3)
+                                # self.mover.target_heading_relative(np.pi, 10)
+                                print("Finding second vamp..")
+                                return
 				self.state = VampState.FindSecond
 			elif self.state == VampState.FindSecond:
 				self.mover.forward(0.01, self.linear_speed_x)
+				if((self.curr_time > 10.0 and  int(self.curr_time % 100.0) == 2) or self.scan_started):
+					self.scan_for_target()
 			elif self.state == VampState.SecondFollowing:
 				self.target_follower(self.target_center_x, self.target_center_y, self.linear_speed_x)
 				if (self.ratio >= self.config.area_ratio):
-					end_time = self.config.duration + time.time()
+					end_time = 5 + time.time()
 					while time.time() < end_time and not rospy.is_shutdown():
-						self.target_follower(self.target_center_x, self.target_center_y, 0.1)
-					self.mover.forward(7.0, -2*self.linear_speed_x)
+						self.target_follower(self.target_center_x, self.target_center_y, 0.3)
+					self.mover.forward(2.0, -2*self.linear_speed_x)
 					self.state = VampState.Done
 			self.prev_state = self.state
 			self.curr_time = time.time() - self.start_time
-			# print("Time: {}".format(self.curr_time))

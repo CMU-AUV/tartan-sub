@@ -2,6 +2,7 @@
 import rospy
 import roslib
 
+import time
 import cv2 as cv
 from task import Task
 from enum import IntEnum
@@ -10,40 +11,84 @@ from sensor_msgs.msg import Image
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge, CvBridgeError
 from vision_utilities import bbox, val_idx, bins, preprocess_image
+import numpy as np
+
+GATE_DEPTH_S = 4
+DICE_ROLL_DURATION = 2
+GATE_FORWARDS_TIME = 35
+GATE_SPIN_TIME = 5
+GATE_FORWARDS_TIME_POST_FANCY = 10
 
 class GateState(IntEnum):
     __order__ = "NothingDetected SomethingDetected Done"
     NothingDetected = 1
     SomethingDetected = 2
     Done = 3
+    Init = 4
+    Orienting = 5
+    Towards = 6
+    Fancy = 7
+    Away = 8
+    Waiting = 9
+    Diving = 10
 
 
 class Gate(Task):
     def __init__(self, sub_controller, run_config):
         self.mover = sub_controller.mover
         self.config = run_config
-        self.camera_sub = rospy.Subscriber(self.config.camera_topic, Image, self.image_callback)
-        self.bridge = CvBridge()
-        # self.templ_left = preprocess_image(cv.imread(self.config.templates_folder + '/left_gate.jpg'))
-        # self.templ_right = preprocess_image(cv.imread(self.config.templates_folder + '/right_gate.jpg'))
-        # self.templ_middle = preprocess_image(cv.imread(self.config.templates_folder + '/middle_gate.jpg'))
         self.visualize = run_config.visualize
         self.sub_center = self.config.camera_dims_x/2
 
     def execute(self, type='naive'):
-        if type == 'temp_matching':
-            self.mover.dive(self.config.gate_depth_time, self.config.gate_depth_speed)
-            while(not rospy.is_shutdown() and self.state == GateState.Done ):
-                print("Current State: " + str(self.state))
-                if self.state == GateState.NothingDetected:
-                    self.mover.forward(0.01, self.config.gate_forward_speed)
-                elif self.state == GateState.SomethingDetected:
-                    self.motion_controller()
-                elif self.start_time > self.config.gate_time:
-                    self.state = GateState.Done
-                self.left = 0
-                self.right = 0
-                self.middle = 0
+        if type == 'fancy':
+            self.state = GateState.Init
+            heading_target = 0
+            while not rospy.is_shutdown() and self.state is not GateState.Done:
+                if self.state == GateState.Init:
+                    heading_target = self.mover.get_heading()
+                    self.state = GateState.Waiting
+                    self.waitDeadline = time.time() + DICE_ROLL_DURATION
+                if self.state == GateState.Waiting:
+                    # print("time remaining: {}".format(self.waitDeadline - time.time()))
+                    if time.time() >= self.waitDeadline:
+                        self.state = GateState.Diving
+                if self.state == GateState.Orienting:
+                    print("Orienting vehicle. Get ready for user prompts!")
+                    txt = raw_input("[l]eft, [r]ight, or [d]one? ")
+                    if txt == "l":
+                        self.mover.turn(0.25,-0.2)
+                    if txt == "L":
+                        self.mover.turn(0.5,-0.3)
+                    elif txt == "r":
+                        self.mover.turn(0.25,0.2)
+                    if txt == "R":
+                        self.mover.turn(0.5,0.3)
+                    elif txt == "d":
+                        print("Final orientation set to {}! Disconnect now! you've got {} seconds...!".format(heading_target, DICE_ROLL_DURATION))
+                        self.waitDeadline = time.time() + DICE_ROLL_DURATION
+                        self.state = GateState.Waiting
+                    else:
+                        print("bad input!")
+                if self.state == GateState.Diving:
+                    print("Descending vehicle:")
+                    #self.mover.target_depth(GATE_DEPTH, timeout_s=2)
+                    self.mover.dive(GATE_DEPTH_S, -0.3)
+                    self.state = GateState.Towards
+                if self.state == GateState.Towards:
+                    print("Approaching gate:")
+                    self.mover.forward(GATE_FORWARDS_TIME, 0.3)
+                    self.state = GateState.Fancy
+                if self.state == GateState.Fancy:
+                    print("Fancy time!")
+                    heading_target = self.mover.get_heading()
+                    self.mover.turn(GATE_SPIN_TIME, 1)
+                    self.mover.target_heading(heading_target, timeout_s=10)
+                    self.state = GateState.Away
+                if self.state == GateState.Away:
+                    print("leaving gate...")
+                    self.mover.forward(GATE_FORWARDS_TIME_POST_FANCY, 0.3)
+                    return
         else:
             self.mover.dive(self.config.gate_depth_time, self.config.gate_depth_speed)
             self.mover.forward(self.config.gate_forward_time, self.config.gate_forward_speed)

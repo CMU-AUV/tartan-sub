@@ -3,9 +3,13 @@ import rospy
 
 from motion_utilities import Mover
 from gate import Gate
+from octagon import Octagon
+#from marker import Marker
 from vamp_visual_servo import VampVisualServoing
 from config import ConfigMap, SimConfig, SubConfig
 from armer import Armer
+import numpy as np
+import sys
 
 
 class SubController(object):
@@ -14,26 +18,53 @@ class SubController(object):
         self.armer = Armer(run_config)
 
 
-if __name__ == "__main__":
+def main(argv):
+    print("Starting run!")
     rospy.init_node('tartan_19_controller', anonymous=True)
 
     run_config = ConfigMap['Sub']
     sub_controller = SubController(run_config)
 
-    gate = Gate(sub_controller, run_config)
-    vamp = VampVisualServoing(sub_controller, run_config)
-
     print("Arming")
     sub_controller.armer.arm()
 
-    sub_controller.mover.dive(2.0, -0.4)
+    print("#######################################")
+    print("        R U N     G A T E S            ")
+    print("#######################################")
 
-    print("Gate")
-    # gate.execute()
+    gate = Gate(sub_controller, run_config)
+    #gate.execute("fancy")
+    sub_controller.mover.dive(4, -0.3)
+    sub_controller.mover.dive(1, -0.2)
 
-    print("Vamp")
+    # sub_controller.mover.target_heading_relative(-0.2, timeout_s=10) # Right turn
+    #sub_controller.mover.forward(5, 0.4)
+
+    print("#######################################")
+    print("        R U N     V A M P S            ")
+    print("#######################################")
+    vamp = VampVisualServoing(sub_controller, run_config)
     vamp.execute()
 
+
+    print("#######################################")
+    print("        R U N     M A R K E R          ")
+    print("#######################################")
+    # marker = Marker(sub_controller, run_config)
+    # marker.execute()
+
+    print("skipping..")
+    #sub_controller.mover.target_heading_relative(0.3, 15) # Left turn
+
+    print("#######################################")
+    print("        R U N     O C T A G O N        ")
+    print("#######################################")
+    octagon = Octagon(sub_controller)
+    octagon.execute()
+
+    print("#######################################")
+    print("        R U N     C O M P L E T E      ")
+    print("#######################################")
     sub_controller.armer.disarm()
 
 if __name__ == '__main__':
