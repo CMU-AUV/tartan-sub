@@ -80,6 +80,7 @@ add_subdirectory(src/utils)
 add_subdirectory(src/tests)
 
 add_subdirectory(src/mission_execute)
+add_subdirectory(src/sensor_check)
 
 
 include(cmake/cppcheck.cmake)
