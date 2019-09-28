@@ -18,8 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   image_transport
   sensor_msgs
-  darknet_ros
-  darknet_ros_msgs
+  #darknet_ros
+  #darknet_ros_msgs
   roslaunch
   tf
 )
@@ -62,7 +62,7 @@ install(PROGRAMS
 )
 
 
-# Macros for declaring ros nodes and libraries 
+# Macros for declaring ros nodes and libraries
 include(cmake/ros-node.cmake)
 
 # Constructors declares libraries that are convenient for building ros messages
@@ -80,6 +80,8 @@ add_subdirectory(src/utils)
 add_subdirectory(src/tests)
 
 add_subdirectory(src/mission_execute)
+
+add_subdirectory(src/controls)
 
 
 include(cmake/cppcheck.cmake)
