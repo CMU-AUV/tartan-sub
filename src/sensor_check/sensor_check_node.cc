@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
         std::cout<<"Sensor Checks Passed"<<std::endl;
     }
     else{
-        std::cout<<"Sensor Checks Falied"<<std::endl;
+	throw std::runtime_error("Sensor Checks Falied");
     }
     return 0;
 }
